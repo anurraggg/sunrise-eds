@@ -2,8 +2,10 @@
 header .nav-wrapper {
   background-color: var(--background-color);
   width: 100%;
-  z-index: 2;
+  z-index: 999;
   position: fixed;
+  padding-bottom: 5px;
+  padding-top: 10px;
 }
 
 header nav {
@@ -145,7 +147,7 @@ header .nav-brand {
 }
 
 header nav .nav-brand img {
-  width: 66px;
+  width: 77px;
   height: auto;
 }
 
@@ -227,6 +229,8 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
     position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul {
