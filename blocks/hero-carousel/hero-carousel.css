@@ -20,7 +20,7 @@
     position: absolute;
     top: 0; left: 0;
     width: 100%;
-    height: 90%;
+    height: 80%;
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -36,7 +36,7 @@
   /* --- SLIDE CONTENT (CENTERED AT BOTTOM) --- */
   .hero-carousel__content {
     position: absolute;
-    bottom: 22%;
+    bottom: 16%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -59,7 +59,7 @@
   /* --- ARROWS --- */
   .hero-carousel__arrow {
     position: absolute;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%);
     background: rgba(255,255,255,0.35);
     border: none;
@@ -84,7 +84,7 @@
   /* --- DOTS --- */
   .hero-carousel__dots {
     position: absolute;
-    bottom: 86px;
+    bottom: 150px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
