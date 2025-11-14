@@ -1,0 +1,126 @@
+.spice-carousel {
+  width: 100%;
+  padding: 40px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* HEADER */
+.sc__header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.sc__header h2 {
+  font-size: 2.2rem;
+  margin-bottom: 5px;
+  color: #2d180a;
+}
+.sc__header p {
+  color: #6f543a;
+  font-size: 1.1rem;
+}
+
+/* WRAPPER / TRACK */
+.sc__wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.sc__track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+/* SLIDE */
+.sc__slide {
+  flex: 0 0 50%; /* 2 cards on desktop */
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .sc__slide {
+    flex: 0 0 100%; /* 1 card on mobile */
+  }
+}
+
+/* CARD */
+.sc__card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 20px;
+  max-width: 420px;
+}
+
+.sc__img-wrap img {
+  width: 100%;
+  display: block;
+}
+
+.sc__card h3 {
+  margin: 16px 0 10px;
+  font-size: 1.3rem;
+  color: #2d180a;
+}
+
+.sc__card p {
+  padding: 0 20px;
+  color: #4f3b2b;
+  font-size: 1rem;
+}
+
+.sc__btn {
+  margin-top: 12px;
+  display: inline-block;
+  background: #d71a28;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+.sc__btn:hover {
+  background: #b71422;
+}
+
+/* ARROWS */
+.sc__nav {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #d71a28;
+  color: white;
+  font-size: 1.6rem;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+.sc__prev { left: 10px; }
+.sc__next { right: 10px; }
+
+/* DOTS */
+.sc__dots {
+  text-align: center;
+  margin-top: 20px;
+}
+.sc__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ccc;
+  margin: 0 5px;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+}
+.sc__dot.active {
+  background: #d71a28;
+}
