@@ -2,106 +2,111 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 50px 0;
+  padding: 40px 0;
 }
 
 .spice-carousel__track {
   display: flex;
-  gap: 40px;
-  transition: transform 0.5s ease;
+  transition: transform 0.4s ease;
 }
 
 .spice-carousel__card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-  overflow: hidden;
-  min-width: calc(50% - 20px);
-  position: relative;
+  width: 50%; /* 2 per row on desktop */
+  box-sizing: border-box;
+  padding: 20px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
 }
 
 @media (max-width: 768px) {
   .spice-carousel__card {
-    min-width: 100%;
+    width: 100%;
+    flex-direction: column;
   }
 }
 
-.spice-carousel__bg {
-  height: 250px;
-  border-radius: 0 0 0 0;
+/* LEFT PART */
+.spice-left {
+  position: relative;
+  width: 45%;
 }
 
-.spice-carousel__img {
+.spice-bg {
+  width: 100%;
+  height: 270px;
+  border-radius: 6px;
+}
+
+.spice-img {
   position: absolute;
-  width: 240px;
-  top: 40px;
+  top: -40px;
   left: 50%;
   transform: translateX(-50%);
+  width: 65%;
 }
 
-.spice-carousel__img img {
-  max-width: 100%;
+/* RIGHT PART */
+.spice-right {
+  background: white;
+  padding: 30px 25px;
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  width: 55%;
 }
 
-.spice-carousel__content {
-  padding: 260px 40px 40px;
-  text-align: left;
-}
-
-.spice-carousel__content h3 {
+.spice-right h3 {
+  margin: 0 0 15px;
   font-size: 24px;
-  margin-bottom: 10px;
+  font-weight: bold;
 }
 
-.spice-carousel__content p {
-  color: #555;
-  margin-bottom: 16px;
+.spice-right p {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 20px;
 }
 
 .cta-btn {
-  display: inline-block;
-  background: #d71a28;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 6px;
+  color: #000;
+  font-weight: bold;
   text-decoration: none;
-  font-weight: 600;
 }
 
-/* Arrows */
+/* ARROWS */
 .spice-carousel__nav {
   position: absolute;
-  top: 50%;
+  top: 45%;
   transform: translateY(-50%);
-  background: #d71a28;
+  background: #d52323;
   border: none;
   color: white;
-  width: 42px;
-  height: 42px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  cursor: pointer;
   font-size: 22px;
+  cursor: pointer;
 }
 
 .spice-carousel__nav.prev { left: 20px; }
 .spice-carousel__nav.next { right: 20px; }
 
-/* Dots */
+/* DOTS */
 .spice-carousel__dots {
-  display: flex;
-  gap: 10px;
+  text-align: center;
   margin-top: 20px;
-  justify-content: center;
 }
 
 .spice-carousel__dots .dot {
+  display: inline-block;
   width: 10px;
   height: 10px;
-  background: #bbb;
+  background: #d1d1d1;
   border-radius: 50%;
+  margin: 0 4px;
   cursor: pointer;
 }
 
 .spice-carousel__dots .dot.active {
-  background: #d71a28;
+  background: #d52323;
 }

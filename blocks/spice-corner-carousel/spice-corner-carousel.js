@@ -10,7 +10,7 @@ export default function decorate(block) {
       img,
       title: cols[1],
       desc: cols[2],
-      ctaText: cols[3] || '',
+      ctaText: cols[3] || 'EXPLORE ALL',
       ctaLink: cols[4] || '#'
     };
   });
@@ -18,94 +18,89 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.classList.add('spice-carousel');
 
-  // Wrapper
   const track = document.createElement('div');
   track.className = 'spice-carousel__track';
 
-  // Auto-color backgrounds (yellow → green → red)
-  const bgColors = ['#ffd027', '#005c37', '#7a1209'];
+  const bgColors = ['#7a1209', '#005c37', '#ffd027']; // red, green, yellow
 
   // Build Slides
   slides.forEach((slide, i) => {
     const card = document.createElement('div');
     card.className = 'spice-carousel__card';
 
-    const bg = document.createElement('div');
-    bg.className = 'spice-carousel__bg';
-    bg.style.background = bgColors[i % bgColors.length];
-
-    const imgWrap = document.createElement('div');
-    imgWrap.className = 'spice-carousel__img';
-    imgWrap.innerHTML = `<img src="${slide.img}" alt="${slide.title}"/>`;
-
-    const content = document.createElement('div');
-    content.className = 'spice-carousel__content';
-    content.innerHTML = `
-      <h3>${slide.title}</h3>
-      <p>${slide.desc}</p>
-      ${slide.ctaText ? `<a class="cta-btn" href="${slide.ctaLink}">${slide.ctaText}</a>` : ''}
+    // LEFT PANEL (BG + IMAGE)
+    const left = document.createElement('div');
+    left.className = 'spice-left';
+    left.innerHTML = `
+      <div class="spice-bg" style="background:${bgColors[i % bgColors.length]}"></div>
+      <img class="spice-img" src="${slide.img}" alt="${slide.title}">
     `;
 
-    card.append(bg, imgWrap, content);
+    // RIGHT PANEL (CONTENT)
+    const right = document.createElement('div');
+    right.className = 'spice-right';
+    right.innerHTML = `
+      <h3>${slide.title}</h3>
+      <p>${slide.desc}</p>
+      <a class="cta-btn" href="${slide.ctaLink}">${slide.ctaText} →</a>
+    `;
+
+    card.append(left, right);
     track.appendChild(card);
   });
 
-  block.appendChild(track);
+  block.append(track);
 
-  // Navigation arrows
+  // ARROWS
   const prev = document.createElement('button');
   prev.className = 'spice-carousel__nav prev';
   prev.innerHTML = '&#10094;';
-
   const next = document.createElement('button');
   next.className = 'spice-carousel__nav next';
   next.innerHTML = '&#10095;';
-
   block.append(prev, next);
 
-  // Pagination dots
+  // DOTS
   const dots = document.createElement('div');
   dots.className = 'spice-carousel__dots';
   slides.forEach((_, i) => {
     const dot = document.createElement('span');
-    dot.className = 'dot';
+    dot.classList.add('dot');
     dot.dataset.index = i;
     dots.append(dot);
   });
   block.append(dots);
 
-  // Carousel Logic
+  // Logic
   let current = 0;
   let cardWidth;
 
-  function updateCardWidth() {
+  const updateCardWidth = () => {
     cardWidth = block.querySelector('.spice-carousel__card').offsetWidth;
-  }
+  };
 
-  function updateUI() {
+  const updateUI = () => {
     track.style.transform = `translateX(-${current * cardWidth}px)`;
+    dots.querySelectorAll('.dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current % slides.length)
+    );
+  };
 
-    dots.querySelectorAll('.dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current % slides.length);
-    });
-  }
-
-  function move(dir) {
+  const move = (dir) => {
     current = (current + dir + slides.length) % slides.length;
     updateUI();
-  }
+  };
 
   prev.addEventListener('click', () => move(-1));
   next.addEventListener('click', () => move(1));
 
-  dots.querySelectorAll('.dot').forEach(dot => {
+  dots.querySelectorAll('.dot').forEach(dot =>
     dot.addEventListener('click', () => {
       current = parseInt(dot.dataset.index);
       updateUI();
-    });
-  });
+    })
+  );
 
-  // Resize recalculation
   window.addEventListener('resize', () => {
     updateCardWidth();
     updateUI();
