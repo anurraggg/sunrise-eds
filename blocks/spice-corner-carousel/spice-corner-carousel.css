@@ -1,107 +1,158 @@
+/* ------------------------------
+   SPICE CAROUSEL BLOCK
+------------------------------ */
+
 .spice-carousel {
-  width: 100%;
   position: relative;
+  width: 100%;
   overflow: hidden;
-  padding: 50px 0;
+  padding: 40px 0;
+  background: #fff6e6; /* light background */
 }
 
+/* Track */
 .spice-carousel__track {
   display: flex;
-  gap: 40px;
+  gap: 40px; /* card spacing */
   transition: transform 0.5s ease;
+  will-change: transform;
+  padding: 0 5%;
 }
 
+/* Card */
 .spice-carousel__card {
   background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  text-align: center;
+  width: calc(50% - 40px); /* 2 cards on desktop */
+  flex-shrink: 0;
   overflow: hidden;
-  min-width: calc(50% - 20px);
-  position: relative;
+  transition: transform 0.3s ease;
 }
 
-@media (max-width: 768px) {
-  .spice-carousel__card {
-    min-width: 100%;
-  }
+.spice-carousel__card:hover {
+  transform: translateY(-6px);
 }
 
-.spice-carousel__bg {
-  height: 250px;
-  border-radius: 0 0 0 0;
-}
-
-.spice-carousel__img {
-  position: absolute;
-  width: 240px;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.spice-carousel__img img {
-  max-width: 100%;
-}
-
-.spice-carousel__content {
-  padding: 260px 40px 40px;
-  text-align: left;
-}
-
-.spice-carousel__content h3 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.spice-carousel__content p {
-  color: #555;
+.spice-carousel__card img {
+  width: 100%;
+  border-radius: 12px;
   margin-bottom: 16px;
 }
 
-.cta-btn {
-  display: inline-block;
-  background: #d71a28;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
+.spice-carousel__card h3 {
+  font-size: 1.4rem;
+  color: #3a1a0b;
+  margin-bottom: 8px;
 }
 
-/* Arrows */
-.spice-carousel__nav {
+.spice-carousel__card p {
+  color: #5a4635;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+/* Button */
+.spice-carousel__btn {
+  background: #d71a28;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.spice-carousel__btn:hover {
+  background: #b71520;
+}
+
+/* ------------------------------
+   ARROWS
+------------------------------ */
+
+.spice-carousel__arrow {
   position: absolute;
-  top: 50%;
+  top: 42%;
   transform: translateY(-50%);
   background: #d71a28;
   border: none;
-  color: white;
-  width: 42px;
-  height: 42px;
+  color: #fff;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
+  font-size: 1.6rem;
   cursor: pointer;
-  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transition: background 0.3s ease;
 }
 
-.spice-carousel__nav.prev { left: 20px; }
-.spice-carousel__nav.next { right: 20px; }
+.spice-carousel__arrow:hover {
+  background: #b71520;
+}
 
-/* Dots */
+.spice-carousel__prev {
+  left: 10px;
+}
+
+.spice-carousel__next {
+  right: 10px;
+}
+
+/* ------------------------------
+   DOTS
+------------------------------ */
+
 .spice-carousel__dots {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
   justify-content: center;
+  padding-top: 20px;
 }
 
 .spice-carousel__dots .dot {
-  width: 10px;
-  height: 10px;
-  background: #bbb;
+  width: 12px;
+  height: 12px;
+  background: #d8c4b0;
   border-radius: 50%;
+  border: none;
   cursor: pointer;
+  transition: transform 0.2s, background 0.3s ease;
 }
 
 .spice-carousel__dots .dot.active {
   background: #d71a28;
+  transform: scale(1.3);
+}
+
+/* ------------------------------
+   RESPONSIVE
+------------------------------ */
+
+@media (max-width: 900px) {
+  .spice-carousel__card {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .spice-carousel__track {
+    gap: 20px;
+    padding: 0 10%;
+  }
+
+  .spice-carousel__card {
+    width: 100%; /* mobile = 1 card */
+  }
+
+  .spice-carousel__arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
 }
