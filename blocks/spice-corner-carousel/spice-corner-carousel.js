@@ -2,100 +2,91 @@ export default function decorate(block) {
   const rows = [...block.children];
   if (!rows.length) return;
 
-  // ------------------------------
-  // 1. Extract slide data
-  // ------------------------------
+  // Extract slide data
   const slides = rows.map((row) => {
-    const imgTag = row.querySelector('img');
-    const img = imgTag ? imgTag.src : '';
-    const title = row.children[1]?.innerText.trim() || '';
-    const desc = row.children[2]?.innerText.trim() || '';
-    return { img, title, desc };
+    const img = row.querySelector('img')?.src || '';
+    const cols = [...row.children].map(c => c.innerText.trim());
+    return {
+      img,
+      title: cols[1],
+      desc: cols[2],
+      ctaText: cols[3] || '',
+      ctaLink: cols[4] || '#'
+    };
   });
 
   block.innerHTML = '';
   block.classList.add('spice-carousel');
 
-  // ------------------------------
-  // 2. Structure
-  // ------------------------------
+  // Wrapper
   const track = document.createElement('div');
   track.className = 'spice-carousel__track';
 
+  // Auto-color backgrounds (yellow → green → red)
+  const bgColors = ['#ffd027', '#005c37', '#7a1209'];
+
+  // Build Slides
   slides.forEach((slide, i) => {
     const card = document.createElement('div');
     card.className = 'spice-carousel__card';
-    card.dataset.index = i;
 
-    const img = document.createElement('img');
-    img.src = slide.img;
+    const bg = document.createElement('div');
+    bg.className = 'spice-carousel__bg';
+    bg.style.background = bgColors[i % bgColors.length];
 
-    const title = document.createElement('h3');
-    title.textContent = slide.title;
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'spice-carousel__img';
+    imgWrap.innerHTML = `<img src="${slide.img}" alt="${slide.title}"/>`;
 
-    const desc = document.createElement('p');
-    desc.textContent = slide.desc;
+    const content = document.createElement('div');
+    content.className = 'spice-carousel__content';
+    content.innerHTML = `
+      <h3>${slide.title}</h3>
+      <p>${slide.desc}</p>
+      ${slide.ctaText ? `<a class="cta-btn" href="${slide.ctaLink}">${slide.ctaText}</a>` : ''}
+    `;
 
-    const btn = document.createElement('a');
-    btn.className = 'spice-carousel__btn';
-    btn.textContent = 'Explore Now';
-    btn.href = '#';
-
-    card.append(img, title, desc, btn);
+    card.append(bg, imgWrap, content);
     track.appendChild(card);
   });
 
   block.appendChild(track);
 
-  // ------------------------------
-  // 3. Arrows
-  // ------------------------------
+  // Navigation arrows
   const prev = document.createElement('button');
-  prev.className = 'spice-carousel__arrow spice-carousel__prev';
+  prev.className = 'spice-carousel__nav prev';
   prev.innerHTML = '&#10094;';
 
   const next = document.createElement('button');
-  next.className = 'spice-carousel__arrow spice-carousel__next';
+  next.className = 'spice-carousel__nav next';
   next.innerHTML = '&#10095;';
 
   block.append(prev, next);
 
-  // ------------------------------
-  // 4. Dots
-  // ------------------------------
+  // Pagination dots
   const dots = document.createElement('div');
   dots.className = 'spice-carousel__dots';
-
   slides.forEach((_, i) => {
-    const d = document.createElement('button');
-    d.className = 'dot';
-    d.dataset.index = i;
-    dots.appendChild(d);
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.dataset.index = i;
+    dots.append(dot);
   });
+  block.append(dots);
 
-  block.appendChild(dots);
-
-  // ------------------------------
-  // 5. Carousel Logic
-  // ------------------------------
+  // Carousel Logic
   let current = 0;
-  let cardWidth = 0;
+  let cardWidth;
 
   function updateCardWidth() {
-    const card = block.querySelector(".spice-carousel__card");
-    if (!card) return;
-
-    const gap = 40; // same as CSS gap
-    cardWidth = card.offsetWidth + gap;
+    cardWidth = block.querySelector('.spice-carousel__card').offsetWidth;
   }
 
   function updateUI() {
-    updateCardWidth();
-    const moveX = current * cardWidth;
-    track.style.transform = `translateX(-${moveX}px)`;
+    track.style.transform = `translateX(-${current * cardWidth}px)`;
 
-    dots.querySelectorAll('.dot').forEach((dot, i) => {
-      dot.classList.toggle('active', i === (current % slides.length));
+    dots.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current % slides.length);
     });
   }
 
@@ -107,23 +98,19 @@ export default function decorate(block) {
   prev.addEventListener('click', () => move(-1));
   next.addEventListener('click', () => move(1));
 
-  dots.querySelectorAll('.dot').forEach((dot) => {
+  dots.querySelectorAll('.dot').forEach(dot => {
     dot.addEventListener('click', () => {
-      current = Number(dot.dataset.index);
+      current = parseInt(dot.dataset.index);
       updateUI();
     });
   });
 
-  // ------------------------------
-  // 6. Wait for images + render
-  // ------------------------------
-  window.addEventListener("load", () => {
+  // Resize recalculation
+  window.addEventListener('resize', () => {
     updateCardWidth();
     updateUI();
   });
 
-  setTimeout(() => {
-    updateCardWidth();
-    updateUI();
-  }, 80); // ensures layout is ready
+  updateCardWidth();
+  updateUI();
 }
