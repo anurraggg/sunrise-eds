@@ -1,112 +1,115 @@
-.spice-carousel {
-  width: 100%;
+\.spice-carousel {
   position: relative;
+  width: 100%;
   overflow: hidden;
   padding: 40px 0;
 }
 
 .spice-carousel__track {
   display: flex;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
+}
+
+.spice-slide {
+  display: flex;
+  gap: 40px;
+  min-width: 100%;
+  box-sizing: border-box;
+  padding: 0 4%;
 }
 
 .spice-carousel__card {
-  width: 50%; /* 2 per row on desktop */
-  box-sizing: border-box;
-  padding: 20px;
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
   display: flex;
-  gap: 30px;
-  align-items: center;
+  min-height: 350px;
 }
 
-@media (max-width: 768px) {
-  .spice-carousel__card {
-    width: 100%;
-    flex-direction: column;
-  }
-}
-
-/* LEFT PART */
-.spice-left {
+.spice-carousel__bg {
+  width: 40%;
   position: relative;
-  width: 45%;
 }
 
-.spice-bg {
-  width: 100%;
-  height: 270px;
-  border-radius: 6px;
-}
-
-.spice-img {
+.spice-carousel__img {
   position: absolute;
-  top: -40px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 65%;
+  width: 70%;
 }
 
-/* RIGHT PART */
-.spice-right {
-  background: white;
-  padding: 30px 25px;
-  border-radius: 6px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  width: 55%;
+.spice-carousel__img img {
+  width: 100%;
+  height: auto;
 }
 
-.spice-right h3 {
-  margin: 0 0 15px;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.spice-right p {
-  color: #333;
-  line-height: 1.5;
-  margin-bottom: 20px;
+.spice-carousel__content {
+  padding: 40px;
+  width: 60%;
 }
 
 .cta-btn {
-  color: #000;
-  font-weight: bold;
-  text-decoration: none;
+  margin-top: 20px;
+  display: inline-block;
+  background: #d71e25;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
 }
 
-/* ARROWS */
 .spice-carousel__nav {
   position: absolute;
-  top: 45%;
+  top: 50%;
   transform: translateY(-50%);
-  background: #d52323;
-  border: none;
+  background: #d71e25;
   color: white;
-  width: 45px;
-  height: 45px;
+  border: none;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
 }
 
-.spice-carousel__nav.prev { left: 20px; }
-.spice-carousel__nav.next { right: 20px; }
+.spice-carousel__nav.prev { left: 2%; }
+.spice-carousel__nav.next { right: 2%; }
 
-/* DOTS */
 .spice-carousel__dots {
   text-align: center;
   margin-top: 20px;
 }
 
 .spice-carousel__dots .dot {
+  width: 12px;
+  height: 12px;
   display: inline-block;
-  width: 10px;
-  height: 10px;
-  background: #d1d1d1;
+  margin: 0 5px;
   border-radius: 50%;
-  margin: 0 4px;
+  background: #ccc;
   cursor: pointer;
 }
 
 .spice-carousel__dots .dot.active {
-  background: #d52323;
+  background: #d71e25;
+}
+
+/* MOBILE — only 1 card per slide */
+@media (max-width: 768px) {
+  .spice-slide {
+    flex-direction: column;
+  }
+  .spice-carousel__card {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .spice-carousel__bg {
+    width: 100%;
+    height: 180px;
+  }
+  .spice-carousel__content {
+    width: 100%;
+    padding: 20px;
+  }
 }
