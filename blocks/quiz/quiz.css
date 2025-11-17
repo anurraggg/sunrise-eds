@@ -247,6 +247,10 @@
   .quiz-result-image img {
     max-width: 190px;
   }
+  .quiz-headline{
+    max-width: 700px;
+    padding-left: 10px;
+  }
 }
 
 

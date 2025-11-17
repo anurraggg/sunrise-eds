@@ -37,7 +37,7 @@ function createEl(tag, attrs = {}, children = []) {
  */
 function getQuizData() {
   return {
-    title: 'MAKE\nYOUR MASALED AANI',
+    title: 'MAKE YOUR MASALEDAANI',
     subtitle: "Questionnaire — pick one option for each question",
     questions: [
       {
