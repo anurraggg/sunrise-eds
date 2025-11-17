@@ -2,68 +2,57 @@ export default function decorate(block) {
   const rows = [...block.children];
   if (!rows.length) return;
 
-  // Extract slide data
-  const cards = rows.map((row) => {
+  const slides = rows.map((row) => {
     const img = row.querySelector('img')?.src || '';
-    const cols = [...row.children].map(c => c.innerText.trim());
+    const cols = [...row.children].map((c) => c.innerText.trim());
     return {
       img,
       title: cols[1],
       desc: cols[2],
-      ctaText: cols[3] || '',
-      ctaLink: cols[4] || '#'
+      ctaText: cols[3],
+      ctaLink: cols[4],
     };
   });
 
   block.innerHTML = '';
-  block.classList.add('spice-carousel');
+  block.classList.add('spice-corner-carousel');
 
-  // ----------- GROUP CARDS INTO SLIDES OF 2 -----------
-  const groupedSlides = [];
-  for (let i = 0; i < cards.length; i += 2) {
-    const pair = [cards[i], cards[i + 1] || cards[0]]; // duplicate first card if odd
-    groupedSlides.push(pair);
-  }
-
-  // Track
   const track = document.createElement('div');
   track.className = 'spice-carousel__track';
 
   const bgColors = ['#7a1209', '#005c37', '#ffd027'];
 
-  // ----------- Build each SLIDE (which contains 2 cards) -----------
-  groupedSlides.forEach((pair, slideIndex) => {
-    const slide = document.createElement('div');
-    slide.className = 'spice-slide';
+  slides.forEach((slide, i) => {
+    const slideWrap = document.createElement('div');
+    slideWrap.className = 'spice-slide';
 
-    pair.forEach((slideData, cardIndex) => {
-      const card = document.createElement('div');
-      card.className = 'spice-carousel__card';
+    const card = document.createElement('div');
+    card.className = 'spice-carousel__card';
 
-      const bg = document.createElement('div');
-      bg.className = 'spice-carousel__bg';
-      bg.style.background = bgColors[(slideIndex * 2 + cardIndex) % bgColors.length];
+    const bg = document.createElement('div');
+    bg.className = 'spice-carousel__bg';
+    bg.style.background = bgColors[i % bgColors.length];
 
-      const imgWrap = document.createElement('div');
-      imgWrap.className = 'spice-carousel__img';
-      imgWrap.innerHTML = `<img src="${slideData.img}" alt="${slideData.title}"/>`;
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'spice-carousel__img';
+    imgWrap.innerHTML = `<img src="${slide.img}" alt="${slide.title}">`;
 
-      const content = document.createElement('div');
-      content.className = 'spice-carousel__content';
-      content.innerHTML = `
-        <h3>${slideData.title}</h3>
-        <p>${slideData.desc}</p>
-        ${slideData.ctaText ? `<a class="cta-btn" href="${slideData.ctaLink}">${slideData.ctaText}</a>` : ''}
-      `;
+    card.append(bg, imgWrap);
 
-      card.append(bg, imgWrap, content);
-      slide.append(card);
-    });
+    const content = document.createElement('div');
+    content.className = 'spice-carousel__content';
 
-    track.appendChild(slide);
+    content.innerHTML = `
+      <h3>${slide.title}</h3>
+      <p>${slide.desc}</p>
+      <a class="cta-btn" href="${slide.ctaLink}">${slide.ctaText}</a>
+    `;
+
+    slideWrap.append(card, content);
+    track.append(slideWrap);
   });
 
-  block.appendChild(track);
+  block.append(track);
 
   // Arrows
   const prev = document.createElement('button');
@@ -79,50 +68,44 @@ export default function decorate(block) {
   // Dots
   const dots = document.createElement('div');
   dots.className = 'spice-carousel__dots';
-  groupedSlides.forEach((_, i) => {
-    const dot = document.createElement('span');
-    dot.className = 'dot';
-    dot.dataset.index = i;
-    dots.append(dot);
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('span');
+    d.className = 'dot';
+    d.dataset.index = i;
+    dots.appendChild(d);
   });
+
   block.append(dots);
 
-  // Logic
   let current = 0;
-  let slideWidth;
-
-  function updateSlideWidth() {
-    slideWidth = block.querySelector('.spice-slide').offsetWidth;
-  }
 
   function updateUI() {
-    track.style.transform = `translateX(-${current * slideWidth}px)`;
+    const slideWidth = block.querySelector('.spice-slide').offsetWidth;
+    const move = current * (slideWidth + 40); // 40px gap
+    track.style.transform = `translateX(-${move}px)`;
 
-    dots.querySelectorAll('.dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current);
+    [...dots.children].forEach((dot, i) => {
+      dot.classList.toggle('active', i === current);
     });
   }
 
-  function move(dir) {
-    current = (current + dir + groupedSlides.length) % groupedSlides.length;
+  function moveSlide(dir) {
+    current = (current + dir + slides.length) % slides.length;
     updateUI();
   }
 
-  prev.addEventListener('click', () => move(-1));
-  next.addEventListener('click', () => move(1));
+  prev.addEventListener('click', () => moveSlide(-1));
+  next.addEventListener('click', () => moveSlide(1));
 
-  dots.querySelectorAll('.dot').forEach(dot => {
+  dots.querySelectorAll('.dot').forEach((dot) => {
     dot.addEventListener('click', () => {
-      current = parseInt(dot.dataset.index);
+      current = Number(dot.dataset.index);
       updateUI();
     });
   });
 
-  window.addEventListener('resize', () => {
-    updateSlideWidth();
-    updateUI();
-  });
+  window.addEventListener('resize', updateUI);
 
-  updateSlideWidth();
   updateUI();
 }
