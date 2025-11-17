@@ -183,6 +183,14 @@
   background: transparent;
 }
 
+.quiz-next-btn:hover:not([disabled]) {
+    background: var(--quiz-accent) !important;
+    color: #1a1a1a !important;
+    border-color: transparent !important;
+    transform: translateY(-3px);
+}
+  
+
 /* ============================================================
    (8) RESULT SCREEN
    ============================================================ */
