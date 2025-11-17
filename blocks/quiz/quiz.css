@@ -50,7 +50,7 @@
 /* (4) Left column */
 .quiz-headline {
   max-width: 700px;
-  padding-left: 10rem;
+  padding-left: 6rem;
 }
 
 .quiz-kicker {
@@ -71,7 +71,7 @@
 
 @media (min-width: 1024px) {
   .quiz-title {
-    font-size: 70px;
+    font-size: 40px;
   }
 }
 
@@ -117,7 +117,7 @@
 }
 
 .quiz-option {
-  padding: 14px 32px;
+  padding: 10px 10px;
   border-radius: 999px;
   border: 2px solid var(--quiz-border);
   background: transparent;
@@ -178,8 +178,9 @@
 }
 
 .quiz-next-btn[disabled] {
-  opacity: 0.4;
+  opacity: 1;
   cursor: not-allowed;
+  background: transparent;
 }
 
 /* ============================================================
@@ -188,12 +189,12 @@
 
 .quiz-result {
   text-align: center;
-  padding: 80px 30rem;
+  padding: 80px 20rem;
   width: 100%;
 }
 
 .quiz-result-title {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 800;
   margin-bottom: 22px;
 }
@@ -206,7 +207,7 @@
 }
 
 .quiz-result-desc {
-  margin: 0 auto 30px;
+  margin: 0 auto 20px;
   max-width: 700px;
   font-size: 18px;
   opacity: 0.9;
