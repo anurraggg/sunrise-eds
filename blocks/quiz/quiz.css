@@ -1,216 +1,248 @@
-/* quiz.css
-   EDS block: quiz
-   - Block-scoped styles.
-   - Mobile-first, responsive layout.
-   - Uses CSS variables for easy theming.
-*/
+/* ============================================================
+   QUIZ BLOCK — FINAL BANNER VERSION
+   Full-width hero style block, left text + right image layout.
+   ============================================================ */
 
-/* variables */
+/* (1) Remove Franklin block default margins/width constraints */
+.quiz.block,
+.quiz-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* (2) Root variables */
 :root {
-    --quiz-bg: #6b241d;
-    --quiz-contrast: #ffffff;
-    --quiz-accent: #f2b400;
-    --quiz-border: rgba(255, 255, 255, 0.35);
-    --quiz-gap: 24px;
-    --quiz-radius: 28px;
-    --quiz-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  }
-  
-  /* wrapper */
+  --quiz-bg: #6b241d;
+  --quiz-text: #ffffff;
+  --quiz-accent: #f2b400;
+  --quiz-border: rgba(255,255,255,0.35);
+  --quiz-gap: 24px;
+  --quiz-radius: 28px;
+  --quiz-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* (3) Wrapper styles — full width hero banner */
+.quiz-wrapper {
+  background-color: var(--quiz-bg);
+  color: var(--quiz-text);
+  font-family: var(--quiz-font);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--quiz-gap);
+
+  padding: 80px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Desktop 2-column layout */
+@media (min-width: 1024px) {
   .quiz-wrapper {
-    box-sizing: border-box;
-    font-family: var(--quiz-font);
-    color: var(--quiz-contrast);
-    background-color: var(--quiz-bg);
-    padding: 48px 24px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--quiz-gap);
-    align-items: start;
-    position: relative;
+    grid-template-columns: 1.3fr 0.7fr;
+    align-items: center;
+    padding: 120px 80px;
   }
-  
-  /* content layout for larger screens */
-  @media (min-width: 1000px) {
-    .quiz-wrapper {
-      grid-template-columns: 1fr 380px;
-      align-items: center;
-      padding: 72px 64px;
-    }
+}
+
+/* (4) Left column */
+.quiz-headline {
+  max-width: 700px;
+  padding-left: 10rem;
+}
+
+.quiz-kicker {
+  display: inline-block;
+  width: 56px;
+  height: 6px;
+  background: linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0.55));
+  margin-bottom: 18px;
+}
+
+.quiz-title {
+  margin: 0 0 10px;
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1px;
+}
+
+@media (min-width: 1024px) {
+  .quiz-title {
+    font-size: 70px;
   }
-  
-  /* headline block */
-  .quiz-headline {
-    max-width: 900px;
+}
+
+.quiz-sub {
+  margin-bottom: 24px;
+  opacity: 0.8;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* (5) Progress + Question */
+.quiz-progress {
+  font-size: 15px;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.quiz-question {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 26px;
+}
+
+@media (min-width: 1024px) {
+  .quiz-question {
+    font-size: 32px;
   }
-  
-  .quiz-kicker {
-    display: inline-block;
-    height: 6px;
-    width: 56px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.55));
-    margin-bottom: 16px;
-  }
-  
+}
+
+/* ============================================================
+   (6) OPTIONS LAYOUT — SIDE BY SIDE (IMPORTANT)
+   ============================================================ */
+
+.quiz-options {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.quiz-option {
+  padding: 14px 32px;
+  border-radius: 999px;
+  border: 2px solid var(--quiz-border);
+  background: transparent;
+  color: var(--quiz-text);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+
+  min-width: 240px;     /* Ensures wide pill look */
+  transition: all 0.25s ease;
+}
+
+/* Selected */
+.quiz-option[aria-pressed="true"] {
+  background: var(--quiz-accent);
+  color: #1a1a1a;
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transform: translateY(-2px);
+}
+
+/* Hover/Focus */
+.quiz-option:hover,
+.quiz-option:focus {
+  border-color: rgba(255,255,255,0.75);
+  transform: translateY(-3px);
+  outline: none;
+}
+
+/* ============================================================
+   (7) RIGHT COLUMN — IMAGE / NEXT BUTTON
+   ============================================================ */
+
+.quiz-side {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 280px;
+  position: relative;
+}
+
+.quiz-image {
+  width: 100%;
+  max-width: 480px;
+}
+
+.quiz-next-btn {
+  padding: 12px 32px;
+  border-radius: var(--quiz-radius);
+  border: 2px solid var(--quiz-border);
+  background: transparent;
+  color: var(--quiz-text);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.quiz-next-btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   (8) RESULT SCREEN
+   ============================================================ */
+
+.quiz-result {
+  text-align: center;
+  padding: 80px 30rem;
+  width: 100%;
+}
+
+.quiz-result-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 22px;
+}
+
+.quiz-result-image img,
+.quiz-result-image picture {
+  max-width: 260px;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.quiz-result-desc {
+  margin: 0 auto 30px;
+  max-width: 700px;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.quiz-retake {
+  margin-top: 24px;
+  background: transparent;
+  border: none;
+  color: var(--quiz-text);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ============================================================
+   (9) MOBILE TWEAKS
+   ============================================================ */
+@media (max-width: 600px) {
   .quiz-title {
     font-size: 40px;
-    line-height: 1.05;
-    font-weight: 700;
-    margin: 0 0 8px 0;
   }
-  
-  @media (min-width: 900px) {
-    .quiz-title {
-      font-size: 64px;
-    }
-  }
-  
-  .quiz-sub {
-    color: rgba(255,255,255,0.85);
-    margin: 8px 0 24px 0;
-    font-weight: 600;
-  }
-  
-  /* progress text */
-  .quiz-progress {
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 12px;
-    font-size: 14px;
-  }
-  
-  /* question */
-  .quiz-question {
-    font-size: 26px;
-    font-weight: 700;
-    margin: 0 0 20px 0;
-  }
-  
-  @media (min-width: 900px) {
-    .quiz-question {
-      font-size: 32px;
-    }
-  }
-  
-  /* options container */
-  .quiz-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 28px;
-  }
-  
+
   .quiz-option {
-    padding: 14px 28px;
-    border-radius: 999px;
-    border: 2px solid var(--quiz-border);
-    background: transparent;
-    color: var(--quiz-contrast);
-    cursor: pointer;
-    font-weight: 600;
-    box-shadow: none;
-    transition: transform 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease;
-    min-width: 190px;
-    text-align: center;
+    min-width: 100%;
   }
-  
-  /* selected state */
-  .quiz-option[aria-pressed="true"] {
-    background: var(--quiz-accent);
-    color: #1f1f1f;
-    border-color: rgba(0,0,0,0.08);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    transform: translateY(-2px);
-  }
-  
-  /* hover/focus */
-  .quiz-option:focus,
-  .quiz-option:hover {
-    transform: translateY(-3px);
-    outline: none;
-    border-color: rgba(255,255,255,0.7);
-  }
-  
-  /* next button area (right side on desktop or below on mobile) */
+
   .quiz-side {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 260px;
-    position: relative;
+    padding-top: 20px;
   }
-  
+
   .quiz-next-btn {
-    border-radius: var(--quiz-radius);
-    padding: 12px 28px;
-    border: 2px solid var(--quiz-border);
-    background: transparent;
-    color: var(--quiz-contrast);
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 18px;
-    transition: transform 160ms ease, background 160ms ease;
+    width: 160px;
   }
-  
-  /* disabled */
-  .quiz-next-btn[disabled] {
-    opacity: 0.45;
-    cursor: not-allowed;
+
+  .quiz-result-image img {
+    max-width: 190px;
   }
-  
-  /* result screen */
-  .quiz-result {
-    text-align: center;
-    padding: 48px 8px;
-  }
-  
-  .quiz-result-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 18px;
-  }
-  
-  .quiz-result-image {
-    max-width: 220px;
-    margin: 0 auto 18px auto;
-  }
-  
-  .quiz-result-desc {
-    max-width: 700px;
-    margin: 0 auto 28px auto;
-    color: rgba(255,255,255,0.9);
-  }
-  
-  /* retake link */
-  .quiz-retake {
-    display: inline-block;
-    margin-top: 24px;
-    color: var(--quiz-contrast);
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: 700;
-  }
-  
-  /* small screens adjustments */
-  @media (max-width: 599px) {
-    .quiz-title {
-      font-size: 28px;
-    }
-  
-    .quiz-option {
-      min-width: 100%;
-      padding: 14px 18px;
-    }
-  
-    .quiz-side {
-      padding-top: 12px;
-    }
-  
-    .quiz-next-btn {
-      width: 160px;
-    }
-  
-    .quiz-result-image {
-      max-width: 180px;
-    }
-  }
-  
+}
