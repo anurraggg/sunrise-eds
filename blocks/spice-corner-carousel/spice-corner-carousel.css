@@ -65,8 +65,7 @@
 }
 
 .cta-btn {
-  background: #d71a28;
-  color: #fff;
+  color: black;
   padding: 16px 28px;
   text-decoration: none;
   border-radius: 10px;
@@ -122,3 +121,83 @@
 .spice-carousel__dots .dot.active {
   background: #d71a28;
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE FIX — MATCH DESIRED OUTPUT
+   ============================================================ */
+
+   @media (max-width: 768px) {
+
+    /* Make each slide full width */
+    .spice-slide {
+      min-width: 100% !important;
+      flex-direction: column;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+  
+    /* Top color bar instead of full height */
+    .spice-carousel__card {
+      width: 100%;
+      padding: 20px 0;
+      border-radius: 16px 16px 0 0;
+      height: auto;
+    }
+  
+    /* Background color only behind the image */
+    .spice-carousel__bg {
+      border-radius: 16px 16px 0 0;
+    }
+  
+    /* Image smaller + centered */
+    .spice-carousel__card img {
+      width: 120px;
+      height: auto;
+    }
+  
+    /* Text/content below the image */
+    .spice-carousel__content {
+      width: 100%;
+      padding: 24px 20px 32px 20px;
+      text-align: center;
+    }
+  
+    .spice-carousel__content h3 {
+      font-size: 25px;
+      margin-bottom: 10px;
+      margin-right: 27px;
+    }
+  
+    .spice-carousel__content p {
+      font-size: 15px;
+      margin-bottom: 20px;
+      margin-right: 27px;
+    }
+  
+    .cta-btn {
+      font-size: 16px;
+      margin-right: 27px;
+    }
+  
+    /* Arrows move slightly outward or downward */
+    .spice-carousel__nav {
+      top: 45%;
+      width: 42px;
+      height: 42px;
+      font-size: 20px;
+    }
+  
+    .spice-carousel__nav.prev {
+      left: 10px;
+    }
+  
+    .spice-carousel__nav.next {
+      right: 10px;
+    }
+  
+    /* Track gap smaller so swipe looks clean */
+    .spice-carousel__track {
+      gap: 40px;
+    }
+  }
+  
