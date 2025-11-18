@@ -1,72 +1,104 @@
-/* FULL WIDTH BANNER */
+/* ============================================================
+   FULL-WIDTH SECTION BREAKOUT (CRITICAL)
+   ============================================================ */
+
+/* Break the ENTIRE section and its inner wrapper */
+.section.recipe-banner-container,
+.section.recipe-banner-container > div {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* ============================================================
+   FULL-WIDTH BANNER BLOCK
+   ============================================================ */
+
+.block.recipe-banner {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0;
+  padding-left: 5rem;
+}
+
+/* Inner wrapper that contains gradient + text */
 .recipe-banner-wrapper {
-    width: 100%;
-    height: 520px;
-    display: flex;
-    align-items: center;
-    padding-left: 6rem;
-  
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 80px 60px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.95),
+    rgba(0,0,0,0.6),
+    rgba(0,0,0,0.2),
+    #f5f1e6
+  );
+
+  color: #fff;
+  display: flex;
+  align-items: center;
+  min-height: 360px; /* optional — adjust height */
+}
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+.recipe-banner-content {
+  max-width: 560px;
+}
+
+.banner-kicker {
+  font-size: 60px;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.banner-title {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 30px;
+}
+
+.banner-cta {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 2px solid rgba(255,255,255,0.4);
+  padding-bottom: 4px;
+}
+
+.banner-cta:hover {
+  border-color: #ffffff;
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  .recipe-banner-wrapper {
+    padding: 60px 20px;
+    min-height: auto;
+
     background: linear-gradient(
-      90deg,
-      rgba(0,0,0,0.95),
-      rgba(0,0,0,0.6),
-      rgba(0,0,0,0.2),
+      180deg,
+      rgba(0,0,0,0.9),
+      rgba(0,0,0,0.3),
       #f5f1e6
     );
-  
-    color: #fff;
   }
-  
-  /* LEFT CONTENT */
-  .recipe-banner-content {
-    max-width: 560px;
-  }
-  
-  .banner-kicker {
-    font-size: 20px;
-    font-weight: 400;
-    opacity: 0.7;
-    margin-bottom: 12px;
-  }
-  
+
   .banner-title {
-    font-size: 56px;
-    font-weight: 700;
-    line-height: 1.1;
-    margin: 0 0 30px;
+    font-size: 34px;
   }
-  
-  .banner-cta {
-    display: inline-block;
-    font-weight: 700;
-    font-size: 18px;
-    color: #fff;
-    text-decoration: none;
-    border-bottom: 2px solid rgba(255,255,255,0.4);
-  
-    padding-bottom: 4px;
-  }
-  
-  .banner-cta:hover {
-    border-color: #ffffff;
-  }
-  
-  /* MOBILE */
-  @media (max-width: 600px) {
-  
-    .recipe-banner-wrapper {
-      height: auto;
-      padding: 60px 20px;
-      background: linear-gradient(
-        180deg,
-        rgba(0,0,0,0.9),
-        rgba(0,0,0,0.3),
-        #f5f1e6
-      );
-    }
-  
-    .banner-title {
-      font-size: 34px;
-    }
-  }
-  
+}
