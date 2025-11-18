@@ -1,20 +1,21 @@
 export default function decorate(block) {
     const rows = [...block.children];
-    if (rows.length < 2) return;
   
-    // Row 1 contains text cells
-    const cells = [...rows[1].children].map((c) => c.textContent.trim());
+    if (!rows.length) return;
+  
+    // Extract the first row’s cells
+    const cells = [...rows[0].children].map((c) => c.textContent.trim());
   
     const kicker = cells[0] || "";
     const title = cells[1] || "";
     const ctaText = cells[2] || "";
     const ctaLink = cells[3] || "#";
   
-    // Build banner HTML
-    const wrapper = document.createElement("div");
-    wrapper.className = "recipe-banner-inner";
+    // Build clean HTML
+    const inner = document.createElement("div");
+    inner.className = "recipe-banner-inner";
   
-    wrapper.innerHTML = `
+    inner.innerHTML = `
       <div class="recipe-banner-content">
         <p class="banner-kicker">${kicker}</p>
         <h2 class="banner-title">${title}</h2>
@@ -22,8 +23,8 @@ export default function decorate(block) {
       </div>
     `;
   
-    // Clear block & insert new markup
+    // Replace table with new structure
     block.innerHTML = "";
-    block.append(wrapper);
+    block.append(inner);
   }
   
