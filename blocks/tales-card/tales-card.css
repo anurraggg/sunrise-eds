@@ -3,28 +3,35 @@
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    gap: 0; /* No gaps between cards */
+    gap: 0;
     scrollbar-width: none;
     -ms-overflow-style: none;
     width: 100%;
+    cursor: grab;
   }
   
   .tales-card-container::-webkit-scrollbar {
     display: none;
   }
   
+  .tales-card-container.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+  
   /* Individual Card Items */
   .tales-card-item {
-    flex: 0 0 100%; /* Mobile: 1 full card per screen */
+    flex: 0 0 100%;
     scroll-snap-align: start;
-    background-color: var(--tales-card-bg, #222); /* Fallback dark bg */
-    border-radius: 0; /* Rectangular */
+    background-color: var(--tales-card-bg, #222);
+    border: none;
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 450px; /* Fixed height for alignment */
-    color: white;
+    min-height: 450px;
+    color: white; /* Default text for content cards is white */
     box-sizing: border-box;
+    user-select: none;
   }
   
   /* Content Styling */
@@ -33,26 +40,27 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    justify-content: flex-end; /* Push text to bottom like screenshot */
+    justify-content: flex-end;
   }
   
   .tales-card-item h3 {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0 0 12px 0;
-    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: inherit;
   }
   
   .tales-card-item p {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 1.5;
     margin: 0 0 24px 0;
-    color: rgba(255, 255, 255, 0.8);
+    color: inherit;
+    opacity: 0.9;
   }
   
-  /* Image Styling - Floating Spice Effect */
+  /* Image Styling */
   .tales-card-image {
-    height: 200px;
+    height: 240px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -63,85 +71,109 @@
   .tales-card-image img {
     width: auto;
     height: 100%;
-    max-width: 80%;
-    object-fit: contain; /* Ensures entire spice image is visible */
+    max-width: 75%;
+    object-fit: contain;
   }
   
-  /* Link/Button */
+  /* --- Link/Button Styling (VIEW NOW) --- */
   .tales-card-link a {
     display: inline-flex;
     align-items: center;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 12px;
+    font-weight: 800;
+    font-size: 13px;
     letter-spacing: 1px;
-    color: white;
+    color: inherit; /* Inherits white from card, or black from intro */
     text-decoration: none;
     gap: 8px;
+    margin-top: auto;
   }
   
   .tales-card-link a::after {
-    content: '→'; /* Arrow icon */
-    font-size: 16px;
+    content: '→'; /* The arrow */
+    font-size: 18px;
+    font-weight: 400;
+    transition: transform 0.2s ease;
   }
   
-  /* --- Intro Card Specifics (First Card) --- */
+  .tales-card-link a:hover::after {
+    transform: translateX(5px);
+  }
+  
+  /* --- INTRO CARD SPECIFICS (The "Tales" Card) --- */
   .tales-card-intro {
-    background-color: #E6DCC3 !important; /* The beige color from screenshot */
-    color: #111;
-  }
-  
-  .tales-card-intro h2 {
-    font-size: 42px;
-    font-weight: 300; /* Thin font weight */
-    line-height: 1;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    color: #111;
-  }
-  
-  .tales-card-intro h2 strong {
-    font-weight: 700; /* Bold "OF SPICES" */
-    display: block;
+    background-color: #E6DCC3 !important; /* Beige */
+    color: #111 !important; /* FORCE BLACK TEXT */
   }
   
   .tales-card-intro .tales-card-content {
-    justify-content: center; /* Center vertical */
-    align-items: flex-start; /* Left align text */
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 50px; /* Indent slightly more */
   }
   
+  .tales-card-intro h2 {
+    font-size: 48px;
+    font-weight: 300; /* Thin "TALES" */
+    line-height: 1;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    color: #111;
+    position: relative;
+    margin-top: 20px;
+  }
+  
+  /* The small black line above the title */
+  .tales-card-intro h2::before {
+    content: '';
+    position: absolute;
+    top: -25px; /* Position above text */
+    left: 0;
+    width: 30px;
+    height: 3px;
+    background-color: #111;
+  }
+  
+  /* Bold "OF SPICES" */
+  .tales-card-intro h2 strong {
+    font-weight: 800;
+    display: block;
+  }
+  
+  /* Ensure Intro Link is Black */
   .tales-card-intro .tales-card-link a {
-    color: #111; /* Dark text for intro link */
-    border-bottom: 1px solid #111;
+    color: #111;
   }
   
-  /* --- Dots Navigation --- */
+  /* --- SEAMLESS DOTS (Transparent Background) --- */
   .tales-card-dots {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 10px;
-    padding: 20px 0;
-    background: #f4f4f4; /* Match page background if needed */
+    padding: 25px 0 40px 0;
+    background: transparent; /* No grey bar */
   }
   
   .tales-card-dot {
     width: 30px;
     height: 4px;
     border-radius: 2px;
-    background-color: #ddd;
+    background-color: #D1D1D1; /* Light grey inactive */
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
   }
   
   .tales-card-dot.active {
-    background-color: #333;
+    background-color: #222; /* Black active */
+    width: 40px;
   }
   
   /* --- Desktop Layout --- */
   @media (min-width: 900px) {
     .tales-card-item {
-      flex: 0 0 25%; /* Exactly 4 cards fit on screen */
+      flex: 0 0 25%; /* 4 cards exactly */
     }
   }

@@ -1,9 +1,5 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
-/**
- * Decorates the tales-card block.
- * @param {Element} block The tales-card block element
- */
 export default async function decorate(block) {
   const cardsContainer = document.createElement('div');
   cardsContainer.classList.add('tales-card-container');
@@ -12,114 +8,97 @@ export default async function decorate(block) {
   dotsContainer.classList.add('tales-card-dots');
   let currentCardIndex = 0;
 
-  // Process each row as a card
+  // Process rows
   Array.from(block.children).forEach((row, index) => {
     const card = document.createElement('div');
     card.classList.add('tales-card-item');
     card.dataset.index = index;
 
     const cols = Array.from(row.children);
-    let linkUrl = '';
+    
+    // Extract Data
+    const titleEl = cols[0]?.querySelector('h1, h2, h3, h4, h5, h6, p') || cols[0];
+    const title = titleEl ? titleEl.innerHTML.trim() : ''; // Use innerHTML for Bold tags
+    
+    const descEl = cols[1]?.querySelector('p') || cols[1];
+    const description = descEl ? descEl.textContent.trim() : '';
+    
+    const imageEl = cols[2]?.querySelector('img');
+    const linkEl = cols[3]?.querySelector('a');
+    const linkUrl = linkEl ? linkEl.href : '';
+    const bgColor = cols[4]?.textContent.trim();
 
-    // Extract content based on the content model
-    // Col 1: Title
-    const titleEl = cols[0] ? cols[0].querySelector('h1, h2, h3, h4, h5, h6, p') || cols[0] : null;
-    const title = titleEl ? titleEl.textContent.trim() : '';
+    // Apply Background Color
+    if (bgColor) card.style.setProperty('--tales-card-bg', bgColor);
 
-    // Col 2: Description
-    const descriptionEl = cols[1] ? cols[1].querySelector('p') || cols[1] : null;
-    const description = descriptionEl ? descriptionEl.innerHTML.trim() : '';
-
-    // Col 3: Image (optional)
-    const imageEl = cols[2] ? cols[2].querySelector('img') : null;
-
-    // Col 4: Link (optional)
-    const linkEl = cols[3] ? cols[3].querySelector('a') : null;
-    linkUrl = linkEl ? linkEl.href : '#';
-
-    // Col 5: Background Color (optional)
-    const bgColorEl = cols[4] ? cols[4].querySelector('p') || cols[4] : null;
-    const bgColor = bgColorEl ? bgColorEl.textContent.trim() : '';
-
-    if (bgColor) {
-      card.style.setProperty('--tales-card-bg', bgColor);
-    }
-
-    // First card (intro card) has different layout - no image
+    // --- 1. INTRO CARD LOGIC ---
     if (index === 0) {
       card.classList.add('tales-card-intro');
-      const introContent = document.createElement('div');
-      introContent.classList.add('tales-card-content');
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('tales-card-content');
 
       if (title) {
         const h2 = document.createElement('h2');
-        h2.innerHTML = title.replace(/\n/g, '<br>'); // Preserve line breaks
-        introContent.append(h2);
+        h2.innerHTML = title; // Allows <strong>OF SPICES</strong>
+        contentDiv.append(h2);
       }
-      if (description) {
-        const p = document.createElement('p');
-        p.innerHTML = description;
-        introContent.append(p);
-      }
-      if (linkUrl && linkUrl !== '#') {
-        const linkWrapper = document.createElement('div');
-        linkWrapper.classList.add('tales-card-link');
+
+      // Link
+      if (linkUrl) {
+        const linkDiv = document.createElement('div');
+        linkDiv.classList.add('tales-card-link');
         const a = document.createElement('a');
         a.href = linkUrl;
-        a.textContent = 'SWIPE TO LEARN'; // Default text if link text is missing
-        // You can also use linkEl.textContent if the author provided specific text
-        introContent.append(linkWrapper);
-        linkWrapper.append(a);
+        a.textContent = linkEl.textContent || 'SWIPE TO LEARN';
+        linkDiv.append(a);
+        contentDiv.append(linkDiv);
       }
-      card.append(introContent);
-    } else {
-      // Regular cards
-      const contentWrapper = document.createElement('div');
-      contentWrapper.classList.add('tales-card-content');
+      card.append(contentDiv);
 
+    } else {
+      // --- 2. CONTENT CARD LOGIC ---
       if (imageEl) {
-        const imgWrapper = document.createElement('div');
-        imgWrapper.classList.add('tales-card-image');
-        imgWrapper.append(createOptimizedPicture(imageEl.src, title, false, [{ width: '400' }]));
-        card.append(imgWrapper);
+        const imgDiv = document.createElement('div');
+        imgDiv.classList.add('tales-card-image');
+        imgDiv.append(createOptimizedPicture(imageEl.src, 'Spice Image', false, [{ width: '400' }]));
+        card.append(imgDiv);
       }
-      
+
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('tales-card-content');
+
       if (title) {
         const h3 = document.createElement('h3');
-        h3.textContent = title;
-        contentWrapper.append(h3);
+        h3.innerHTML = title;
+        contentDiv.append(h3);
       }
       if (description) {
         const p = document.createElement('p');
-        p.innerHTML = description;
-        contentWrapper.append(p);
+        p.textContent = description;
+        contentDiv.append(p);
       }
-      if (linkUrl && linkUrl !== '#') {
-        const linkWrapper = document.createElement('div');
-        linkWrapper.classList.add('tales-card-link');
+      
+      // FORCE VIEW NOW LINK
+      if (linkUrl) {
+        const linkDiv = document.createElement('div');
+        linkDiv.classList.add('tales-card-link');
         const a = document.createElement('a');
         a.href = linkUrl;
         a.textContent = 'VIEW NOW';
-        linkWrapper.append(a);
-        contentWrapper.append(linkWrapper);
+        linkDiv.append(a);
+        contentDiv.append(linkDiv);
       }
-      card.append(contentWrapper);
+      card.append(contentDiv);
     }
 
     cardsContainer.append(card);
 
-    // Create pagination dot
+    // Dots
     const dot = document.createElement('button');
-    dot.ariaLabel = `Go to slide ${index + 1}`;
     dot.classList.add('tales-card-dot');
-    if (index === currentCardIndex) {
-      dot.classList.add('active');
-    }
+    if (index === 0) dot.classList.add('active');
     dot.addEventListener('click', () => {
-      cardsContainer.scrollTo({
-        left: card.offsetLeft,
-        behavior: 'smooth',
-      });
+      cardsContainer.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
     });
     dotsContainer.append(dot);
   });
@@ -128,31 +107,45 @@ export default async function decorate(block) {
   block.append(cardsContainer);
   block.append(dotsContainer);
 
-  // --- Scroll & Active State Management ---
-  const updateDots = () => {
-    const scrollPosition = cardsContainer.scrollLeft + (cardsContainer.offsetWidth / 2);
-    const cards = cardsContainer.querySelectorAll('.tales-card-item');
-    let newIndex = 0;
+  // Scroll Logic & Drag (Same as before)
+  let isDown = false;
+  let startX;
+  let scrollLeft;
 
-    cards.forEach((card, i) => {
-      if (card.offsetLeft <= scrollPosition && (card.offsetLeft + card.offsetWidth) > scrollPosition) {
-        newIndex = i;
+  cardsContainer.addEventListener('mousedown', (e) => {
+    isDown = true;
+    cardsContainer.classList.add('dragging');
+    startX = e.pageX - cardsContainer.offsetLeft;
+    scrollLeft = cardsContainer.scrollLeft;
+  });
+  cardsContainer.addEventListener('mouseleave', () => {
+    isDown = false;
+    cardsContainer.classList.remove('dragging');
+  });
+  cardsContainer.addEventListener('mouseup', () => {
+    isDown = false;
+    cardsContainer.classList.remove('dragging');
+  });
+  cardsContainer.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - cardsContainer.offsetLeft;
+    const walk = (x - startX) * 2;
+    cardsContainer.scrollLeft = scrollLeft - walk;
+  });
+
+  // Update Dots on Scroll
+  cardsContainer.addEventListener('scroll', () => {
+    const center = cardsContainer.scrollLeft + (cardsContainer.offsetWidth / 2);
+    const cards = cardsContainer.querySelectorAll('.tales-card-item');
+    cards.forEach((c, i) => {
+      if (c.offsetLeft <= center && (c.offsetLeft + c.offsetWidth) > center) {
+        if (currentCardIndex !== i) {
+          dotsContainer.querySelector('.active')?.classList.remove('active');
+          dotsContainer.children[i]?.classList.add('active');
+          currentCardIndex = i;
+        }
       }
     });
-
-    if (newIndex !== currentCardIndex) {
-      const currentDot = dotsContainer.querySelector('.tales-card-dot.active');
-      if (currentDot) currentDot.classList.remove('active');
-      
-      const newDot = dotsContainer.children[newIndex];
-      if (newDot) newDot.classList.add('active');
-      
-      currentCardIndex = newIndex;
-    }
-  };
-
-  cardsContainer.addEventListener('scroll', () => {
-    clearTimeout(cardsContainer.scrollTimeout);
-    cardsContainer.scrollTimeout = setTimeout(updateDots, 50);
   });
 }
