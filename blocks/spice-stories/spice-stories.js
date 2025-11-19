@@ -1,36 +1,30 @@
-// blocks/spice-stories/spice-stories.js
+// spice-stories.js
 export default function decorate(block) {
+    // read rows (each row -> array of cell texts)
     const rows = [...block.children].map((r) => [...r.children].map(c => c.innerText.trim()));
     if (!rows.length) return;
   
-    // Parse rows into slide objects
+    // parse rows into slide objects
     const slides = rows.map((cells) => {
-      // Accept both orders (some editors might use first column as TYPE or second)
-      // We'll detect TYPE by searching for 'intro'/'spice' in any cell position 0..1
-      const type = (cells[0] || '').toLowerCase() === 'intro' || (cells[1] || '').toLowerCase() === 'intro'
-        ? 'intro'
-        : (cells[0] || '').toLowerCase() === 'spice' || (cells[1] || '').toLowerCase() === 'spice'
-        ? 'spice'
-        : 'spice';
+      // detect TYPE if present in first col or second
+      const possibleType = (cells[0] || '').toLowerCase();
+      const offset = (possibleType === 'intro' || possibleType === 'spice') ? 1 : 0;
+      const type = (cells[offset - 1] && cells[offset - 1].toLowerCase() === 'intro') || (cells[offset] && cells[offset].toLowerCase() === 'intro')
+        ? 'intro' : 'spice';
   
-      // Attempt to find fields based on common column positions:
-      // If TYPE is in col 0 -> shift indexes by 1
-      const offset = (cells[0] && (cells[0].toLowerCase() === 'intro' || cells[0].toLowerCase() === 'spice')) ? 1 : 0;
-  
-      const image = cells[offset + 0] || '';      // IMAGE
-      const title = cells[offset + 1] || '';      // TITLE
-      const desc = cells[offset + 2] || '';       // DESCRIPTION
-      const ctaText = cells[offset + 3] || '';    // CTA TEXT
-      const ctaLink = cells[offset + 4] || '#';   // CTA LINK
+      const image = cells[offset + 0] || '';
+      const title = cells[offset + 1] || '';
+      const desc = cells[offset + 2] || '';
+      const ctaText = cells[offset + 3] || '';
+      const ctaLink = cells[offset + 4] || '#';
       const bg = (cells[offset + 5] && cells[offset + 5].startsWith('#')) ? cells[offset + 5] : null;
   
       return { type, image, title, desc, ctaText, ctaLink, bg };
     });
   
-    // Preset fallback colors if no bg specified
-    const defaultColors = ['#0F6A55', '#1F1A19', '#7D2625', '#2F5B3F', '#5B2D2A', '#7A3A2F'];
+    const defaultColors = ['#e8d7af', '#0f624f', '#302020', '#7a2b28', '#386b4c', '#b14333'];
   
-    // Build DOM
+    // build DOM
     block.innerHTML = '';
     block.classList.add('spice-stories-block');
   
@@ -45,8 +39,7 @@ export default function decorate(block) {
       slide.className = 'ss-slide';
       slide.style.background = s.bg || defaultColors[i % defaultColors.length];
   
-      // Slide inner layout: left = intro content (for `intro` or generic title lines), right = content
-      // For intro slide we render the exact intro layout; for spice slide we render image + copy.
+      // each slide contains both left (intro copy) and right (image + copy)
       slide.innerHTML = `
         <div class="ss-slide-inner">
           <div class="ss-left">
@@ -54,26 +47,23 @@ export default function decorate(block) {
               <div class="ss-underline"></div>
               <p class="ss-label">${s.type === 'intro' ? (s.title || 'Tales of Spices') : 'Tales of Spices'}</p>
               <h2 class="ss-main">${s.type === 'intro' ? (s.desc || 'OF SPICES') : 'OF SPICES'}</h2>
-              ${s.type === 'intro' ? `<p class="ss-swipe">${s.ctaText || 'Swipe to Learn'}</p>` : ''}
+              ${s.type === 'intro' ? `<p class="ss-swipe">${s.ctaText || 'Swipe to Learn →'}</p>` : ''}
             </div>
           </div>
           <div class="ss-right">
             <div class="ss-right-inner">
-              ${s.type === 'spice' ? `<img class="ss-image" src="${s.image}" alt="${s.title}">` : ''}
+              ${s.type === 'spice' && s.image ? `<img class="ss-image" src="${s.image}" alt="${s.title}">` : ''}
               ${s.type === 'spice' ? `<h3 class="ss-title">${s.title}</h3>` : ''}
               ${s.type === 'spice' ? `<p class="ss-desc">${s.desc}</p>` : ''}
-              ${s.type === 'spice' ? `<a class="ss-cta" href="${s.ctaLink}" target="_blank" rel="noopener">${s.ctaText || 'View Now →'}</a>` : ''}
+              ${s.type === 'spice' ? `<a class="ss-cta" href="${s.ctaLink}" target="_blank" rel="noopener noreferrer">${s.ctaText || 'View Now →'}</a>` : ''}
             </div>
           </div>
         </div>
       `;
-  
       track.appendChild(slide);
     });
   
-    wrapper.appendChild(track);
-  
-    // Dots
+    // dots
     const dots = document.createElement('div');
     dots.className = 'ss-dots';
     slides.forEach((_, i) => {
@@ -85,34 +75,43 @@ export default function decorate(block) {
       dots.appendChild(d);
     });
   
+    wrapper.appendChild(track);
     wrapper.appendChild(dots);
     block.appendChild(wrapper);
   
-    /* Slider logic: support desktop drag and mobile touch */
+    // Slider logic
     let current = 0;
     let isDragging = false;
     let startX = 0;
     let currentTranslate = 0;
     let prevTranslate = 0;
-    let animationID = 0;
-    const slidesCount = slides.length;
+    let animationId = 0;
+    const slideCount = slides.length;
   
-    const getSlideWidth = () => wrapper.offsetWidth;
+    // Ensure each slide has same width and set track width
+    function layoutSlides() {
+      const containerWidth = wrapper.clientWidth;
+      const slideEls = track.children;
+      for (let i = 0; i < slideEls.length; i += 1) {
+        slideEls[i].style.width = `${containerWidth}px`;
+      }
+      track.style.width = `${containerWidth * slideEls.length}px`;
+      setPositionByIndex();
+    }
   
-    // set initial sizes
-    const setPositionByIndex = () => {
-      const width = getSlideWidth();
-      currentTranslate = -current * width;
+    function setPositionByIndex() {
+      const cw = wrapper.clientWidth;
+      currentTranslate = -current * cw;
       prevTranslate = currentTranslate;
       track.style.transform = `translateX(${currentTranslate}px)`;
       updateDots();
-    };
+    }
   
-    const updateDots = () => {
+    function updateDots() {
       [...dots.children].forEach((d, i) => d.classList.toggle('active', i === current));
-    };
+    }
   
-    // click dots
+    // dot click
     dots.addEventListener('click', (e) => {
       const btn = e.target.closest('.ss-dot');
       if (!btn) return;
@@ -120,50 +119,50 @@ export default function decorate(block) {
       setPositionByIndex();
     });
   
-    // Pointer / mouse events for desktop drag
-    track.addEventListener('pointerdown', pointerStart);
-    window.addEventListener('pointerup', pointerEnd);
-    window.addEventListener('pointermove', pointerMove);
+    // pointer & touch handling (desktop drag + mobile touch)
+    track.addEventListener('pointerdown', startDrag);
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointermove', onDrag);
+    // touch fallback (pointer covers most browsers but keep touch handlers)
+    track.addEventListener('touchstart', startDrag, { passive: true });
+    track.addEventListener('touchend', endDrag);
+    track.addEventListener('touchmove', onDrag, { passive: true });
   
-    // Touch fallback (pointer should cover most)
-    track.addEventListener('touchstart', pointerStart, { passive: true });
-    track.addEventListener('touchend', pointerEnd);
-    track.addEventListener('touchmove', pointerMove, { passive: true });
-  
-    function pointerStart(e) {
+    function startDrag(e) {
       isDragging = true;
       startX = getClientX(e);
-      animationID = requestAnimationFrame(animation);
+      animationId = requestAnimationFrame(animation);
       track.classList.add('grabbing');
     }
   
-    function pointerMove(e) {
+    function onDrag(e) {
       if (!isDragging) return;
       const currentX = getClientX(e);
       const dx = currentX - startX;
       currentTranslate = prevTranslate + dx;
     }
   
-    function pointerEnd() {
+    function endDrag() {
       if (!isDragging) return;
       isDragging = false;
-      cancelAnimationFrame(animationID);
+      cancelAnimationFrame(animationId);
       track.classList.remove('grabbing');
   
-      const movedBy = currentTranslate - prevTranslate; // negative if moved left
-      const threshold = getSlideWidth() * 0.2;
+      const movedBy = currentTranslate - prevTranslate;
+      const threshold = wrapper.clientWidth * 0.18; // 18% threshold
   
-      if (movedBy < -threshold && current < slidesCount - 1) {
+      if (movedBy < -threshold && current < slideCount - 1) {
         current += 1;
       } else if (movedBy > threshold && current > 0) {
         current -= 1;
       }
+  
       setPositionByIndex();
     }
   
     function animation() {
       track.style.transform = `translateX(${currentTranslate}px)`;
-      if (isDragging) requestAnimationFrame(animation);
+      if (isDragging) animationId = requestAnimationFrame(animation);
     }
   
     function getClientX(e) {
@@ -171,21 +170,21 @@ export default function decorate(block) {
       return e.clientX;
     }
   
-    // Responsive: recalc on resize
+    // resize handling
     window.addEventListener('resize', () => {
-      setPositionByIndex();
+      layoutSlides();
     });
   
-    // Keyboard navigation (optional)
+    // keyboard navigation
     block.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft' && current > 0) {
         current -= 1; setPositionByIndex();
-      } else if (e.key === 'ArrowRight' && current < slidesCount - 1) {
+      } else if (e.key === 'ArrowRight' && current < slideCount - 1) {
         current += 1; setPositionByIndex();
       }
     });
   
     // initial layout
-    setPositionByIndex();
+    layoutSlides();
   }
   
