@@ -1,46 +1,111 @@
-/* spice-stories.css */
-.spice-stories-block { width:100%; box-sizing:border-box; padding:40px 0 72px; }
-.ss-wrapper { width:92%; margin:0 auto; overflow:hidden; position:relative; border-radius:12px; }
-.ss-track { display:flex; transition:transform 380ms cubic-bezier(.22,.9,.3,1); will-change:transform; touch-action:pan-y; user-select:none; -webkit-user-drag:none; }
-.ss-slide { min-width:100%; box-sizing:border-box; padding:40px 0 80px; color:#fff; display:flex; align-items:stretch; }
-.ss-slide-inner { display:grid; grid-template-columns:38% 62%; gap:20px; width:100%; padding:20px 40px; align-items:center; }
-
-/* LEFT column */
-.ss-left { display:flex; align-items:flex-start; justify-content:flex-start; color:#111; }
-.ss-left-inner { padding-left:12px; }
-.ss-underline { width:56px; height:6px; background:#111; margin-bottom:16px; }
-.ss-label { margin:0 0 8px; font-size:18px; opacity:.9; color:#111; }
-.ss-main { margin:0 0 18px; font-size:56px; line-height:1; letter-spacing:-1px; font-weight:800; color:#111; }
-.ss-swipe { margin-top:12px; font-weight:700; color:#111; }
-
-/* RIGHT column */
-.ss-right { display:flex; align-items:center; }
-.ss-right-inner { padding-left:30px; max-width:800px; }
-.ss-image { width:160px; display:block; margin:0 0 18px; }
-.ss-title { margin:0 0 10px; font-size:32px; font-weight:800; color:#fff; }
-.ss-desc { font-size:18px; line-height:1.6; margin-bottom:18px; color:rgba(255,255,255,0.95); }
-.ss-cta { font-weight:800; color:#fff; text-decoration:none; border-bottom:2px solid rgba(255,255,255,0.7); padding-bottom:4px; display:inline-block; }
-
-/* dots */
-.ss-dots { display:flex; justify-content:center; margin-top:18px; gap:12px; }
-.ss-dot { width:12px; height:12px; border-radius:50%; background:rgba(0,0,0,0.2); opacity:0.8; border:none; cursor:pointer; }
-.ss-dot.active { background:#000; opacity:1; }
-
-/* dragging cursor */
-.ss-track.grabbing, .ss-track:active { cursor:grabbing; cursor:-webkit-grabbing; }
-
-/* responsive */
-@media (max-width:860px) {
-  .ss-wrapper{ width:98%; }
-  .ss-slide-inner{ grid-template-columns:1fr; padding:28px; }
-  .ss-left{ order:1; padding-bottom:12px; }
-  .ss-right{ order:2; padding-top:12px; }
-  .ss-main{ font-size:40px; }
-  .ss-title{ font-size:26px; }
-  .ss-image{ width:140px; }
-}
-@media (max-width:480px) {
-  .ss-main{ font-size:32px; }
-  .ss-desc{ font-size:15px; }
-  .ss-image{ width:100px; }
-}
+.spice-stories {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  .spice-track {
+    display: flex;
+    transition: transform 0.45s ease;
+    width: 100%;
+  }
+  
+  .spice-slide {
+    min-width: 100%;
+    padding: 60px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* INTRO SLIDE */
+  .intro-wrapper {
+    max-width: 600px;
+  }
+  
+  .intro-title {
+    font-size: 60px;
+    font-weight: bold;
+  }
+  
+  .intro-subtitle {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+  
+  .intro-desc {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+  
+  /* SPICE SLIDE LAYOUT */
+  .spice-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+  
+  .spice-image img {
+    width: 260px;
+    height: auto;
+  }
+  
+  .spice-text h2 {
+    font-size: 48px;
+    margin: 0;
+  }
+  
+  .spice-text h3 {
+    font-size: 28px;
+    margin: 10px 0;
+  }
+  
+  .cta {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: underline;
+  }
+  
+  /* DOTS */
+  .spice-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    gap: 12px;
+  }
+  
+  .spice-dots .dot {
+    width: 16px;
+    height: 16px;
+    background: #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .spice-dots .dot.active {
+    background: #000;
+    transform: scale(1.2);
+  }
+  
+  /* MOBILE */
+  @media (max-width: 800px) {
+    .spice-wrapper {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .spice-image img {
+      width: 200px;
+    }
+  
+    .intro-title {
+      font-size: 40px;
+    }
+  }
+  
