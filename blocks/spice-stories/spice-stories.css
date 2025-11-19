@@ -1,110 +1,136 @@
 .spice-stories {
-    overflow: hidden;
     width: 100%;
-    position: relative;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    display: flex;
+    gap: 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 40px;
+    border-radius: 20px;
   }
   
-  .spice-track {
-    display: flex;
-    transition: transform 0.45s ease;
-    width: 100%;
+  /* Remove scrollbar */
+  .spice-stories::-webkit-scrollbar {
+    display: none;
   }
   
   .spice-slide {
-    min-width: 100%;
-    padding: 60px;
+    flex: 0 0 100%;
+    height: 500px;
+    scroll-snap-align: start;
+    padding: 60px 80px;
     box-sizing: border-box;
+    border-radius: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
   }
   
-  /* INTRO SLIDE */
+  /* INTRO CARD (left-aligned layout) */
   .intro-wrapper {
-    max-width: 600px;
+    max-width: 480px;
   }
   
   .intro-title {
-    font-size: 60px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
   }
   
   .intro-subtitle {
-    font-size: 48px;
-    font-weight: 700;
-    margin: 10px 0;
+    font-size: 64px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    line-height: 1.1;
   }
   
   .intro-desc {
-    font-size: 24px;
-    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
   }
   
-  /* SPICE SLIDE LAYOUT */
+  /* SPICE CARD (image right / text left) */
   .spice-wrapper {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 60px;
+  }
+  
+  .spice-text {
+    max-width: 460px;
+  }
+  
+  .spice-text h2 {
+    font-size: 42px;
+    font-weight: 800;
+    margin: 0;
+  }
+  
+  .spice-text h3 {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 12px 0 20px;
+    line-height: 1.4;
   }
   
   .spice-image img {
     width: 260px;
     height: auto;
+    object-fit: contain;
   }
   
-  .spice-text h2 {
-    font-size: 48px;
-    margin: 0;
-  }
-  
-  .spice-text h3 {
-    font-size: 28px;
-    margin: 10px 0;
-  }
-  
+  /* CTA */
   .cta {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 10px;
     font-size: 20px;
-    font-weight: bold;
-    color: #000;
+    font-weight: 700;
     text-decoration: underline;
+    color: black;
   }
   
   /* DOTS */
   .spice-dots {
     display: flex;
     justify-content: center;
-    margin-top: 25px;
+    margin-top: 20px;
     gap: 12px;
   }
   
   .spice-dots .dot {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     background: #ddd;
     border-radius: 50%;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.2s;
   }
   
   .spice-dots .dot.active {
     background: #000;
-    transform: scale(1.2);
+    transform: scale(1.25);
   }
   
   /* MOBILE */
-  @media (max-width: 800px) {
+  @media (max-width: 900px) {
+  
+    .spice-slide {
+      flex: 0 0 100%;
+      padding: 40px;
+    }
+  
     .spice-wrapper {
       flex-direction: column;
       text-align: center;
     }
   
     .spice-image img {
-      width: 200px;
+      width: 180px;
     }
   
-    .intro-title {
+    .intro-subtitle {
       font-size: 40px;
     }
   }

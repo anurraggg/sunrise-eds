@@ -2,7 +2,12 @@ export default function decorate(block) {
     const rows = [...block.children];
     block.innerHTML = "";
   
-    const slides = rows.map((row) => {
+    // Main container becomes horizontal scroll strip
+    block.classList.add("spice-stories");
+  
+    const slides = [];
+  
+    rows.forEach((row) => {
       const cells = [...row.children].map((c) => c.textContent.trim());
       const [type, image, title, subtitle, desc, ctaText, ctaLink, bgColor] = cells;
   
@@ -21,29 +26,26 @@ export default function decorate(block) {
       } else {
         slide.innerHTML = `
           <div class="spice-wrapper">
-            <div class="spice-image">
-              <img src="${image}" alt="${title}">
-            </div>
             <div class="spice-text">
               <h2>${title}</h2>
               <h3>${subtitle}</h3>
               <p>${desc}</p>
               <a href="${ctaLink}" target="_blank" class="cta">${ctaText}</a>
             </div>
+            <div class="spice-image">
+              <img src="${image}" alt="${title}">
+            </div>
           </div>
         `;
       }
   
-      return slide;
+      block.appendChild(slide);
+      slides.push(slide);
     });
   
-    // Create track
-    const track = document.createElement("div");
-    track.className = "spice-track";
-    slides.forEach((s) => track.appendChild(s));
-    block.appendChild(track);
-  
-    // Pagination dots
+    /* -------------------------------
+       PAGINATION DOTS
+    --------------------------------*/
     const dots = document.createElement("div");
     dots.className = "spice-dots";
   
@@ -54,53 +56,66 @@ export default function decorate(block) {
       dots.appendChild(dot);
     });
   
-    block.appendChild(dots);
+    block.after(dots);
   
-    let index = 0;
-    const update = () => {
-      track.style.transform = `translateX(-${index * 100}%)`;
-      dots.querySelectorAll(".dot").forEach((d) => d.classList.remove("active"));
-      dots.children[index].classList.add("active");
-    };
-  
-    // Dot click
+    /* -------------------------------
+       DOT CLICK → SCROLL TO SLIDE
+    --------------------------------*/
     dots.addEventListener("click", (e) => {
-      if (e.target.classList.contains("dot")) {
-        index = Number(e.target.dataset.index);
-        update();
-      }
+      if (!e.target.classList.contains("dot")) return;
+  
+      const index = Number(e.target.dataset.index);
+      const targetSlide = slides[index];
+      targetSlide.scrollIntoView({ behavior: "smooth", inline: "start" });
     });
   
-    // Swipe / Drag
-    let startX = 0;
+    /* -------------------------------
+       UPDATE DOTS ON SCROLL
+    --------------------------------*/
+    const updateDots = () => {
+      const scrollLeft = block.scrollLeft;
+      const width = block.clientWidth;
+  
+      let activeIndex = Math.round(scrollLeft / width);
+  
+      dots.querySelectorAll(".dot").forEach((d) => d.classList.remove("active"));
+      if (dots.children[activeIndex]) {
+        dots.children[activeIndex].classList.add("active");
+      }
+    };
+  
+    block.addEventListener("scroll", () => {
+      requestAnimationFrame(updateDots);
+    });
+  
+    // Highlight dot #0 at start
+    updateDots();
+  
+    /* -------------------------------
+       DESKTOP DRAG SCROLL
+    --------------------------------*/
     let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
   
     block.addEventListener("mousedown", (e) => {
       isDown = true;
-      startX = e.clientX;
+      block.classList.add("dragging");
+      startX = e.pageX - block.offsetLeft;
+      scrollStart = block.scrollLeft;
     });
   
-    block.addEventListener("mouseup", (e) => {
-      if (!isDown) return;
-      const diff = e.clientX - startX;
-      if (diff < -50 && index < slides.length - 1) index++;
-      if (diff > 50 && index > 0) index--;
-      update();
+    window.addEventListener("mouseup", () => {
       isDown = false;
+      block.classList.remove("dragging");
     });
   
-    // Touch
-    block.addEventListener("touchstart", (e) => {
-      startX = e.touches[0].clientX;
+    block.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - block.offsetLeft;
+      const walk = (x - startX) * -1;
+      block.scrollLeft = scrollStart + walk;
     });
-  
-    block.addEventListener("touchend", (e) => {
-      const diff = e.changedTouches[0].clientX - startX;
-      if (diff < -50 && index < slides.length - 1) index++;
-      if (diff > 50 && index > 0) index--;
-      update();
-    });
-  
-    update();
   }
   
