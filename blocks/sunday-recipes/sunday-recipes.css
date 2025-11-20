@@ -1,0 +1,152 @@
+/* Container Layout */
+.sunday-recipes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 Columns Desktop */
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  
+  /* Individual Card */
+  .sunday-recipes-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+  }
+  
+  .sunday-recipes-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Image Section */
+  .sunday-recipes-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .sunday-recipes-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .sunday-recipes-card:hover .sunday-recipes-image img {
+    transform: scale(1.05);
+  }
+  
+  /* Tag Badge */
+  .sunday-recipes-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #000;
+    color: #fff;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 16px;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  
+  /* Overlay Title (Bottom of image) */
+  .sunday-recipes-overlay-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 16px 8px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  
+  /* Content Section */
+  .sunday-recipes-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .sunday-recipes-content h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  
+  .sunday-recipes-content h3 a {
+    text-decoration: none;
+    color: #111;
+  }
+  
+  .sunday-recipes-content h3 a:hover {
+    color: #d32f2f;
+  }
+  
+  /* Metadata */
+  .sunday-recipes-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .sunday-recipes-meta span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Button Actions */
+  .sunday-recipes-actions {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  
+  .sunday-recipes-actions button {
+    background-color: #E3000F;
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .sunday-recipes-actions button:hover {
+    background-color: #b0000b;
+  }
+  
+  /* --- RESPONSIVE --- */
+  
+  /* Tablet/Mobile (< 900px) -> 2 Columns */
+  @media (max-width: 900px) {
+    .sunday-recipes-container {
+      grid-template-columns: repeat(2, 1fr); /* 2 Columns */
+      gap: 16px;
+    }
+  }
+  
+  /* Small Mobile (< 480px) -> 1 Column (Optional, but good for very small screens) */
+  @media (max-width: 480px) {
+    .sunday-recipes-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .sunday-recipes-image {
+      height: 180px;
+    }
+  }
