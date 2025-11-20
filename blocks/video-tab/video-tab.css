@@ -1,17 +1,17 @@
 /* video-tab.css
-   EDS / Franklin block styling for "video-tab" block
-   - two cards per slide on wide screens, 1 per slide on small screens
-   - arrows, pagination indicator, play overlay
+   DIV-based parsing version (EDS / Google Docs output)
+   2 cards per slide (>=880px), 1 per slide on small screens.
 */
 
-/* wrapper + base */
 .video-tab-wrapper {
-    margin: 48px auto;
+    margin: 40px auto;
     max-width: 1200px;
-    padding: 0 24px;
+    padding: 0 20px;
     box-sizing: border-box;
-    --vt-gap: 28px;
+    --vt-gap: 20px;
     --vt-arrow-size: 44px;
+    --vt-accent: #e12b2b;
+    --vt-muted: #6b6b6b;
   }
   
   .video-tab {
@@ -19,29 +19,26 @@
     font-family: inherit;
   }
   
-  /* header area: optional title & subtitle produced by authoring document */
+  /* header */
   .video-tab .vt-head {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
-  
   .video-tab .vt-title {
-    font-size: 2.4rem;
-    font-weight: 700;
-    line-height: 1.05;
     margin: 0 0 6px 0;
+    font-size: 1.9rem;
+    font-weight: 700;
   }
-  
   .video-tab .vt-sub {
-    color: var(--muted-color, #666);
     margin: 0;
+    color: var(--vt-muted);
     font-size: 1rem;
   }
   
-  /* carousel container */
+  /* track outer */
   .video-tab .vt-track-outer {
     position: relative;
     overflow: hidden;
-    padding: 12px 0;
+    padding: 10px 0;
   }
   
   .video-tab .vt-track {
@@ -52,37 +49,38 @@
     touch-action: pan-y;
   }
   
-  /* slide (holds up to 2 cards on desktop) */
+  /* slide and card */
   .video-tab .vt-slide {
     flex: 0 0 100%;
-    box-sizing: border-box;
     display: flex;
     gap: var(--vt-gap);
+    box-sizing: border-box;
     align-items: stretch;
   }
   
-  /* card styling */
   .video-tab .vt-card {
     background: var(--card-bg, #fff);
     border-radius: 8px;
-    box-shadow: 0 1px 0 rgba(0,0,0,.06);
     overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    position: relative;
+    min-height: 200px;
     flex: 1 1 0;
-    position: relative;
-    min-height: 220px;
+    display: flex;
+    flex-direction: column;
   }
   
+  /* thumbnail container (aspect-ratio) */
   .video-tab .vt-thumb {
-    display: block;
     width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%;
     position: relative;
-    background-color: #e9e9e9;
+    background: #efefef;
+    line-height: 0;
   }
-  
   .video-tab .vt-thumb img,
   .video-tab .vt-thumb picture,
+  .video-tab .vt-thumb iframe,
   .video-tab .vt-thumb video {
     position: absolute;
     inset: 0;
@@ -90,6 +88,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    border: 0;
   }
   
   /* play overlay */
@@ -105,37 +104,29 @@
     display: grid;
     place-items: center;
     cursor: pointer;
-    z-index: 3;
-    transition: transform 160ms ease, background 160ms ease;
+    z-index: 4;
+    border: 0;
   }
-  
-  .video-tab .vt-play:focus,
-  .video-tab .vt-play:hover {
-    transform: translate(-50%, -50%) scale(1.05);
+  .video-tab .vt-play svg { width: 28px; height: 28px; fill: #fff; }
+  .video-tab .vt-play:focus, .video-tab .vt-play:hover {
+    transform: translate(-50%, -50%) scale(1.04);
     background: rgba(0,0,0,0.65);
   }
   
-  .video-tab .vt-play svg {
-    width: 28px;
-    height: 28px;
-    fill: #fff;
-  }
-  
-  /* card body (title/desc) */
+  /* body */
   .video-tab .vt-body {
-    padding: 14px 16px;
-    font-size: 0.95rem;
+    padding: 12px 14px;
+    flex: 0 0 auto;
   }
-  
   .video-tab .vt-card-title {
     margin: 0 0 8px 0;
     font-weight: 600;
+    font-size: 1rem;
   }
-  
   .video-tab .vt-card-desc {
     margin: 0;
-    color: var(--muted-color, #666);
-    font-size: 0.9rem;
+    color: var(--vt-muted);
+    font-size: 0.92rem;
   }
   
   /* arrows */
@@ -150,55 +141,39 @@
     background: transparent;
     border: 0;
     cursor: pointer;
-    z-index: 5;
+    z-index: 6;
   }
+  .video-tab .vt-arrow svg { width: 20px; height: 20px; fill: #222; }
+  .video-tab .vt-arrow--prev { left: 8px; }
+  .video-tab .vt-arrow--next { right: 8px; }
   
-  .video-tab .vt-arrow svg { width: 20px; height: 20px; }
-  
-  .video-tab .vt-arrow--prev {
-    left: 8px;
-  }
-  
-  .video-tab .vt-arrow--next {
-    right: 8px;
-  }
-  
-  /* pagination indicator */
+  /* pagination */
   .video-tab .vt-pagination {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-top: 18px;
+    margin-top: 14px;
   }
-  
   .video-tab .vt-dot {
-    width: 36px;
+    width: 34px;
     height: 6px;
     border-radius: 6px;
     background: rgba(0,0,0,0.12);
-    transition: background 180ms ease, transform 180ms ease;
+    transition: background 160ms ease, transform 160ms ease;
   }
+  .video-tab .vt-dot--active { background: var(--vt-accent); transform: scaleX(1.05); }
   
-  .video-tab .vt-dot--active {
-    background: var(--accent, #e12b2b);
-    transform: scaleX(1.05);
-  }
-  
-  /* responsive: two cards per slide on >= 880px */
+  /* responsiveness */
   @media (min-width: 880px) {
-    .video-tab .vt-slide {
-      gap: var(--vt-gap);
-    }
     .video-tab .vt-slide .vt-card {
-      min-width: calc((100% - var(--vt-gap)) / 2);
       flex: 0 0 calc((100% - var(--vt-gap)) / 2);
+      min-width: calc((100% - var(--vt-gap)) / 2);
     }
   }
   
-  /* small screens: show one card only */
   @media (max-width: 600px) {
-    .video-tab .vt-title { font-size: 1.4rem; }
     .video-tab .vt-arrow { display: none; }
+    .video-tab .vt-title { font-size: 1.4rem; }
     .video-tab .vt-dot { width: 28px; }
   }
   
