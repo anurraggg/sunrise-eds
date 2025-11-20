@@ -1,7 +1,4 @@
-/* video-tab.css
-   DIV-based parsing version (EDS / Google Docs output)
-   2 cards per slide (>=880px), 1 per slide on small screens.
-*/
+/* video-tab.css - DIV-based video-tab styling (project style) */
 
 .video-tab-wrapper {
     margin: 40px auto;
@@ -14,166 +11,52 @@
     --vt-muted: #6b6b6b;
   }
   
-  .video-tab {
-    position: relative;
-    font-family: inherit;
-  }
+  .video-tab { position: relative; font-family: inherit; }
   
-  /* header */
-  .video-tab .vt-head {
-    margin-bottom: 14px;
-  }
-  .video-tab .vt-title {
-    margin: 0 0 6px 0;
-    font-size: 1.9rem;
-    font-weight: 700;
-  }
-  .video-tab .vt-sub {
-    margin: 0;
-    color: var(--vt-muted);
-    font-size: 1rem;
-  }
+  .vt-head { margin-bottom: 12px; }
+  .vt-title { margin: 0 0 6px 0; font-size: 1.9rem; font-weight:700; }
+  .vt-sub { margin:0; color:var(--vt-muted); }
   
-  /* track outer */
-  .video-tab .vt-track-outer {
-    position: relative;
-    overflow: hidden;
-    padding: 10px 0;
-  }
+  /* track */
+  .vt-track-outer { position: relative; overflow: hidden; padding: 8px 0; }
+  .vt-track { display:flex; gap:var(--vt-gap); transition:transform .32s cubic-bezier(.2,.9,.2,1); will-change:transform; touch-action: pan-y; }
   
-  .video-tab .vt-track {
-    display: flex;
-    gap: var(--vt-gap);
-    transition: transform 320ms cubic-bezier(.2,.9,.2,1);
-    will-change: transform;
-    touch-action: pan-y;
-  }
+  /* slide & card */
+  .vt-slide { flex:0 0 100%; display:flex; gap:var(--vt-gap); align-items:stretch; box-sizing:border-box; }
+  .vt-card { background:var(--card-bg,#fff); border-radius:8px; overflow:hidden; box-shadow:0 1px 0 rgba(0,0,0,0.04); display:flex; flex-direction:column; min-height:200px; flex:1 1 0; }
   
-  /* slide and card */
-  .video-tab .vt-slide {
-    flex: 0 0 100%;
-    display: flex;
-    gap: var(--vt-gap);
-    box-sizing: border-box;
-    align-items: stretch;
-  }
-  
-  .video-tab .vt-card {
-    background: var(--card-bg, #fff);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-    position: relative;
-    min-height: 200px;
-    flex: 1 1 0;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* thumbnail container (aspect-ratio) */
-  .video-tab .vt-thumb {
-    width: 100%;
-    padding-bottom: 56.25%;
-    position: relative;
-    background: #efefef;
-    line-height: 0;
-  }
-  .video-tab .vt-thumb img,
-  .video-tab .vt-thumb picture,
-  .video-tab .vt-thumb iframe,
-  .video-tab .vt-thumb video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    border: 0;
-  }
+  /* thumb */
+  .vt-thumb { width:100%; padding-bottom:56.25%; position:relative; background:#efefef; line-height:0; }
+  .vt-thumb img, .vt-thumb picture, .vt-thumb iframe, .vt-thumb video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   
   /* play overlay */
-  .video-tab .vt-play {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.55);
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    z-index: 4;
-    border: 0;
-  }
-  .video-tab .vt-play svg { width: 28px; height: 28px; fill: #fff; }
-  .video-tab .vt-play:focus, .video-tab .vt-play:hover {
-    transform: translate(-50%, -50%) scale(1.04);
-    background: rgba(0,0,0,0.65);
-  }
+  .vt-play { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:64px; height:64px; border-radius:50%; background:rgba(0,0,0,0.55); display:grid; place-items:center; cursor:pointer; z-index:4; border:0; }
+  .vt-play svg { width:28px; height:28px; fill:#fff; }
+  .vt-play:focus, .vt-play:hover { transform:translate(-50%,-50%) scale(1.04); background:rgba(0,0,0,0.65); }
   
   /* body */
-  .video-tab .vt-body {
-    padding: 12px 14px;
-    flex: 0 0 auto;
-  }
-  .video-tab .vt-card-title {
-    margin: 0 0 8px 0;
-    font-weight: 600;
-    font-size: 1rem;
-  }
-  .video-tab .vt-card-desc {
-    margin: 0;
-    color: var(--vt-muted);
-    font-size: 0.92rem;
-  }
+  .vt-body { padding:12px 14px; flex:0 0 auto; }
+  .vt-card-title { margin:0 0 8px 0; font-weight:600; font-size:1rem; }
+  .vt-card-desc { margin:0; color:var(--vt-muted); font-size:0.92rem; }
   
   /* arrows */
-  .video-tab .vt-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: var(--vt-arrow-size);
-    height: var(--vt-arrow-size);
-    display: grid;
-    place-items: center;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    z-index: 6;
-  }
-  .video-tab .vt-arrow svg { width: 20px; height: 20px; fill: #222; }
-  .video-tab .vt-arrow--prev { left: 8px; }
-  .video-tab .vt-arrow--next { right: 8px; }
+  .vt-arrow { position:absolute; top:50%; transform:translateY(-50%); width:var(--vt-arrow-size); height:var(--vt-arrow-size); display:grid; place-items:center; background:transparent; border:0; cursor:pointer; z-index:6; }
+  .vt-arrow svg { width:20px; height:20px; fill:#222; }
+  .vt-arrow--prev { left:8px; }
+  .vt-arrow--next { right:8px; }
   
   /* pagination */
-  .video-tab .vt-pagination {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .video-tab .vt-dot {
-    width: 34px;
-    height: 6px;
-    border-radius: 6px;
-    background: rgba(0,0,0,0.12);
-    transition: background 160ms ease, transform 160ms ease;
-  }
-  .video-tab .vt-dot--active { background: var(--vt-accent); transform: scaleX(1.05); }
+  .vt-pagination { display:flex; justify-content:center; gap:8px; margin-top:14px; }
+  .vt-dot { width:34px; height:6px; border-radius:6px; background:rgba(0,0,0,0.12); transition:background .16s ease, transform .16s ease; }
+  .vt-dot--active { background:var(--vt-accent); transform:scaleX(1.05); }
   
-  /* responsiveness */
-  @media (min-width: 880px) {
-    .video-tab .vt-slide .vt-card {
-      flex: 0 0 calc((100% - var(--vt-gap)) / 2);
-      min-width: calc((100% - var(--vt-gap)) / 2);
-    }
+  /* responsive */
+  @media (min-width:880px) {
+    .vt-slide .vt-card { flex:0 0 calc((100% - var(--vt-gap)) / 2); min-width: calc((100% - var(--vt-gap)) / 2); }
   }
-  
-  @media (max-width: 600px) {
-    .video-tab .vt-arrow { display: none; }
-    .video-tab .vt-title { font-size: 1.4rem; }
-    .video-tab .vt-dot { width: 28px; }
+  @media (max-width:600px) {
+    .vt-arrow { display:none; }
+    .vt-title { font-size:1.4rem; }
+    .vt-dot { width:28px; }
   }
   
