@@ -1,0 +1,229 @@
+/* sunrise-videos.css
+   Responsive two-up slider with overlay play button and modal player
+*/
+
+.sunrise-videos-wrapper {
+    --sv-gap: 28px;
+    padding: 48px 32px;
+    background: var(--page-bg, #f4f0ea);
+    box-sizing: border-box;
+    font-family: var(--body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial);
+  }
+  
+  /* header */
+  .sv-header {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+  }
+  .sv-eyebrow {
+    font-size: 18px;
+    color: #222;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .sv-headline {
+    font-size: 40px;
+    margin: 0 0 8px;
+    line-height: 1.02;
+    font-weight: 800;
+  }
+  .sv-sub {
+    color: #6b6b6b;
+    margin: 0 0 20px;
+    font-size: 18px;
+  }
+  
+  /* slider stage */
+  .sv-slider {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    padding: 8px 40px; /* give space for arrows */
+    box-sizing: border-box;
+  }
+  
+  .sv-track {
+    display: flex;
+    gap: var(--sv-gap);
+    transition: transform 400ms ease;
+    will-change: transform;
+  }
+  
+  /* per slide (card) */
+  .sv-slide {
+    flex: 0 0 calc(100% / 1); /* default 1-per-view; overridden via media query */
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  }
+  
+  .sv-thumb {
+    position: relative;
+    line-height: 0;
+    min-height: 220px;
+    background: #000;
+  }
+  .sv-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* play overlay */
+  .sv-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+  .sv-play-circle {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    background: rgba(255,255,255,0.95);
+    position: relative;
+  }
+  .sv-play-circle::after {
+    content: '';
+    position: absolute;
+    left: 26px;
+    top: 18px;
+    width: 0;
+    height: 0;
+    border-left: 16px solid #111;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+  }
+  
+  /* caption */
+  .sv-caption {
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222;
+  }
+  
+  /* controls */
+  .sv-controls {
+    max-width: 1200px;
+    margin: 18px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .sv-arrow {
+    border: none;
+    background: transparent;
+    font-size: 28px;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #c33;
+  }
+  .sv-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .sv-dot {
+    width: 36px;
+    height: 8px;
+    background: #bbb;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .sv-dot.active {
+    background: #c33;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+  }
+  
+  /* modal */
+  .sv-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 1200;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  html.sv-modal-open .sv-modal {
+    display: flex;
+    pointer-events: auto;
+  }
+  .sv-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+  }
+  .sv-modal-panel {
+    position: relative;
+    width: min(1100px, 95%);
+    max-height: 80vh;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    margin: 16px;
+    z-index: 2;
+  }
+  .sv-modal-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    z-index: 3;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .sv-player {
+    width: 100%;
+    height: calc(80vh - 24px);
+  }
+  
+  /* responsive: two per view on wide screens */
+  @media (min-width: 900px) {
+    .sv-slide {
+      flex: 0 0 calc(50% - var(--sv-gap) / 2);
+    }
+    .sv-thumb {
+      min-height: 320px;
+    }
+  }
+  
+  /* small screens */
+  @media (max-width: 599px) {
+    .sv-headline {
+      font-size: 28px;
+    }
+    .sv-slider {
+      padding: 8px;
+    }
+    .sv-thumb {
+      min-height: 180px;
+    }
+  }
+  
