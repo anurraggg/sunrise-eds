@@ -34,34 +34,43 @@ function extractYouTubeId(str) {
   }
   
   export default async function decorate(block) {
-    // Wait for auto-block content
-    await new Promise(r => requestAnimationFrame(r));
+    // Allow auto-blocking to finish
+    await new Promise((r) => requestAnimationFrame(r));
   
     const rows = [...block.children];
     const ids = [];
   
-    rows.forEach(row => {
+    rows.forEach((row) => {
       const cell = row.querySelector(":scope > div > p");
       if (!cell) return;
+  
       const raw = cell.textContent.trim();
       const id = extractYouTubeId(raw);
       if (id) ids.push(id);
     });
   
     if (ids.length === 0) {
-      console.error("sunrise-videos: no IDs parsed");
+      console.error("sunrise-videos: no valid YouTube IDs found");
       return;
     }
   
-    // Clear block
+    // Clear original content
     block.innerHTML = "";
     block.classList.add("sunrise-videos-slider");
   
-    // Slider wrapper
-    const wrapper = document.createElement("div");
-    wrapper.className = "sv-track";
+    // --- FIXED STRUCTURE ---
+    // SLIDER VIEWPORT (overflow hidden)
+    const slider = document.createElement("div");
+    slider.className = "sv-slider";
   
-    // Build 2-per-slide videos
+    // TRACK (slides move left/right)
+    const track = document.createElement("div");
+    track.className = "sv-track";
+  
+    // Add track inside slider
+    slider.appendChild(track);
+  
+    // Build slides (2 videos per slide)
     for (let i = 0; i < ids.length; i += 2) {
       const slide = document.createElement("div");
       slide.className = "sv-slide";
@@ -69,7 +78,7 @@ function extractYouTubeId(str) {
       if (ids[i]) slide.append(createThumb(ids[i]));
       if (ids[i + 1]) slide.append(createThumb(ids[i + 1]));
   
-      wrapper.appendChild(slide);
+      track.appendChild(slide);
     }
   
     // Controls
@@ -81,15 +90,16 @@ function extractYouTubeId(str) {
     next.className = "sv-next";
     next.innerHTML = "›";
   
-    block.append(prev, wrapper, next);
+    // Append everything in correct order
+    block.append(prev, slider, next);
   
-    // Slider logic
+    // --- SLIDING LOGIC ---
     let index = 0;
-    const slides = [...wrapper.children];
+    const slides = [...track.children];
     const total = slides.length;
   
     function update() {
-      wrapper.style.transform = `translateX(-${index * 100}%)`;
+      track.style.transform = `translateX(-${index * 100}%)`;
     }
   
     prev.onclick = () => {
@@ -102,8 +112,8 @@ function extractYouTubeId(str) {
       update();
     };
   
-    // Inline video replace
-    wrapper.addEventListener("click", (e) => {
+    // --- CLICK THUMB TO PLAY VIDEO ---
+    track.addEventListener("click", (e) => {
       const thumb = e.target.closest(".sv-thumb");
       if (!thumb) return;
   

@@ -1,57 +1,60 @@
+/* OUTER BLOCK */
 .sunrise-videos-slider {
     position: relative;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
-    overflow: hidden;
     padding: 20px 0;
   }
   
-  .sv-slider-wrapper {
-    position: relative;
-    width: 100%;
-  }
-  
+  /* INNER VISIBLE WINDOW */
   .sv-slider {
-    overflow: hidden;
     width: 100%;
+    overflow: hidden; /* FIX: clipping happens here */
   }
   
+  /* TRACK (HOLDS ALL SLIDES) */
   .sv-track {
     display: flex;
-    transition: transform 0.4s ease;
     width: 100%;
+    transition: transform 0.45s ease;
   }
   
+  /* EACH SLIDE (2 per slide, centered) */
   .sv-slide {
-    width: 100%;
-    flex: 0 0 100%;
+    flex: 0 0 100%; /* FIX: each slide is full width */
     display: flex;
     justify-content: center;
     gap: 20px;
+    padding: 10px 0;
   }
   
-  .sv-thumb {
-    position: relative;
+  /* THUMBNAILS */
+  .sv-thumb,
+  iframe {
     width: 48%;
-    max-width: 600px;
+    max-width: 520px;
+    border-radius: 10px;
+    display: block;
     cursor: pointer;
   }
   
+  /* THUMB IMAGE */
   .sv-thumb img {
     width: 100%;
     display: block;
     border-radius: 10px;
   }
   
+  /* PLAY BUTTON */
   .sv-play {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.8);
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.85);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -61,32 +64,31 @@
     pointer-events: none;
   }
   
+  /* FIX ARROWS (move them OUTSIDE the video area) */
   .sv-prev,
   .sv-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: white;
+    background: #ff0000;
+    color: white;
     border: none;
-    padding: 10px 14px;
+    padding: 14px 18px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 24px;
-    z-index: 10;
+    z-index: 5;
+  
+    /* Add shadow for visibility */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
   }
   
+  /* Move arrows further LEFT and RIGHT */
   .sv-prev {
-    left: 10px;
+    left: -40px; /* previously 10px */
   }
   
   .sv-next {
-    right: 10px;
-  }
-  
-  iframe {
-    width: 48%;
-    max-width: 600px;
-    border-radius: 10px;
-    height: 340px;
+    right: -40px; /* previously 10px */
   }
   
