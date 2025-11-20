@@ -67,7 +67,7 @@
   
   /* --- Content Section --- */
   .sunday-recipes-content {
-    padding: 24px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 12px;

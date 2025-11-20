@@ -64,7 +64,7 @@ export default async function decorate(block) {
     if (difficulty) {
       const diffSpan = document.createElement('span');
       // Using emojis as fallback icons, but you can use <span class="icon icon-chef"></span>
-      diffSpan.innerHTML = `👨‍🍳 ${difficulty}`; 
+      diffSpan.innerHTML = `/icons/clock-svgrepo-com.png ${difficulty}`; 
       metaDiv.append(diffSpan);
     }
 
