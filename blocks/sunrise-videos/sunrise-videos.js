@@ -1,70 +1,113 @@
-export default async function decorate(block) {
-    // Wait for block content to actually be present
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+function extractYouTubeId(str) {
+    // Raw ID?
+    if (/^[a-zA-Z0-9_-]{11}$/.test(str)) return str;
   
-    const rows = block.querySelectorAll(':scope > div');
+    // URL?
+    const regExp = /^.*(youtu.be\/|v\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+    const match = str.match(regExp);
+    return match && match[2]?.length === 11 ? match[2] : null;
+  }
+  
+  function createThumb(id) {
+    const div = document.createElement("div");
+    div.className = "sv-thumb";
+    div.dataset.id = id;
+  
+    const img = document.createElement("img");
+    img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    img.loading = "lazy";
+  
+    const play = document.createElement("div");
+    play.className = "sv-play";
+  
+    div.append(img, play);
+    return div;
+  }
+  
+  function createIframe(id) {
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+    iframe.allow =
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    iframe.allowFullscreen = true;
+    return iframe;
+  }
+  
+  export default async function decorate(block) {
+    // Wait for auto-block content
+    await new Promise(r => requestAnimationFrame(r));
+  
+    const rows = [...block.children];
     const ids = [];
   
-    // Parse authored rows (skip header)
-    for (let i = 1; i < rows.length; i++) {
-      const cell = rows[i].querySelector(':scope > div');
-      if (!cell) continue;
-  
+    rows.forEach(row => {
+      const cell = row.querySelector(":scope > div > p");
+      if (!cell) return;
       const raw = cell.textContent.trim();
       const id = extractYouTubeId(raw);
-  
       if (id) ids.push(id);
-    }
+    });
   
     if (ids.length === 0) {
-      console.error('No YouTube IDs found in content.');
+      console.error("sunrise-videos: no IDs parsed");
       return;
     }
   
-    // Build slider layout
-    block.innerHTML = `
-      <div class="sv-slider-wrapper">
-        <button class="sv-arrow sv-left">‹</button>
-        <div class="sv-slider"><div class="sv-track"></div></div>
-        <button class="sv-arrow sv-right">›</button>
-      </div>
-    `;
+    // Clear block
+    block.innerHTML = "";
+    block.classList.add("sunrise-videos-slider");
   
-    const track = block.querySelector('.sv-track');
+    // Slider wrapper
+    const wrapper = document.createElement("div");
+    wrapper.className = "sv-track";
   
-    // 2 per slide
+    // Build 2-per-slide videos
     for (let i = 0; i < ids.length; i += 2) {
-      const slide = document.createElement('div');
-      slide.className = 'sv-slide';
+      const slide = document.createElement("div");
+      slide.className = "sv-slide";
   
-      if (ids[i]) slide.appendChild(createThumbnail(ids[i]));
-      if (ids[i + 1]) slide.appendChild(createThumbnail(ids[i + 1]));
+      if (ids[i]) slide.append(createThumb(ids[i]));
+      if (ids[i + 1]) slide.append(createThumb(ids[i + 1]));
   
-      track.appendChild(slide);
+      wrapper.appendChild(slide);
     }
   
+    // Controls
+    const prev = document.createElement("button");
+    prev.className = "sv-prev";
+    prev.innerHTML = "‹";
+  
+    const next = document.createElement("button");
+    next.className = "sv-next";
+    next.innerHTML = "›";
+  
+    block.append(prev, wrapper, next);
+  
+    // Slider logic
     let index = 0;
-    const slides = [...track.children];
+    const slides = [...wrapper.children];
     const total = slides.length;
   
     function update() {
-      track.style.transform = `translateX(-${index * 100}%)`;
+      wrapper.style.transform = `translateX(-${index * 100}%)`;
     }
   
-    block.querySelector('.sv-left').onclick = () => {
+    prev.onclick = () => {
       index = Math.max(0, index - 1);
       update();
     };
   
-    block.querySelector('.sv-right').onclick = () => {
+    next.onclick = () => {
       index = Math.min(total - 1, index + 1);
       update();
     };
   
-    track.addEventListener('click', (e) => {
-      const t = e.target.closest('.sv-thumb');
-      if (!t) return;
-      t.replaceWith(createIframe(t.dataset.id));
+    // Inline video replace
+    wrapper.addEventListener("click", (e) => {
+      const thumb = e.target.closest(".sv-thumb");
+      if (!thumb) return;
+  
+      thumb.replaceWith(createIframe(thumb.dataset.id));
     });
   }
   
