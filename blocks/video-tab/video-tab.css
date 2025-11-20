@@ -1,0 +1,204 @@
+/* video-tab.css
+   EDS / Franklin block styling for "video-tab" block
+   - two cards per slide on wide screens, 1 per slide on small screens
+   - arrows, pagination indicator, play overlay
+*/
+
+/* wrapper + base */
+.video-tab-wrapper {
+    margin: 48px auto;
+    max-width: 1200px;
+    padding: 0 24px;
+    box-sizing: border-box;
+    --vt-gap: 28px;
+    --vt-arrow-size: 44px;
+  }
+  
+  .video-tab {
+    position: relative;
+    font-family: inherit;
+  }
+  
+  /* header area: optional title & subtitle produced by authoring document */
+  .video-tab .vt-head {
+    margin-bottom: 20px;
+  }
+  
+  .video-tab .vt-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0 0 6px 0;
+  }
+  
+  .video-tab .vt-sub {
+    color: var(--muted-color, #666);
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  /* carousel container */
+  .video-tab .vt-track-outer {
+    position: relative;
+    overflow: hidden;
+    padding: 12px 0;
+  }
+  
+  .video-tab .vt-track {
+    display: flex;
+    gap: var(--vt-gap);
+    transition: transform 320ms cubic-bezier(.2,.9,.2,1);
+    will-change: transform;
+    touch-action: pan-y;
+  }
+  
+  /* slide (holds up to 2 cards on desktop) */
+  .video-tab .vt-slide {
+    flex: 0 0 100%;
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--vt-gap);
+    align-items: stretch;
+  }
+  
+  /* card styling */
+  .video-tab .vt-card {
+    background: var(--card-bg, #fff);
+    border-radius: 8px;
+    box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    overflow: hidden;
+    flex: 1 1 0;
+    position: relative;
+    min-height: 220px;
+  }
+  
+  .video-tab .vt-thumb {
+    display: block;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 */
+    position: relative;
+    background-color: #e9e9e9;
+  }
+  
+  .video-tab .vt-thumb img,
+  .video-tab .vt-thumb picture,
+  .video-tab .vt-thumb video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* play overlay */
+  .video-tab .vt-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.55);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: transform 160ms ease, background 160ms ease;
+  }
+  
+  .video-tab .vt-play:focus,
+  .video-tab .vt-play:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    background: rgba(0,0,0,0.65);
+  }
+  
+  .video-tab .vt-play svg {
+    width: 28px;
+    height: 28px;
+    fill: #fff;
+  }
+  
+  /* card body (title/desc) */
+  .video-tab .vt-body {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .video-tab .vt-card-title {
+    margin: 0 0 8px 0;
+    font-weight: 600;
+  }
+  
+  .video-tab .vt-card-desc {
+    margin: 0;
+    color: var(--muted-color, #666);
+    font-size: 0.9rem;
+  }
+  
+  /* arrows */
+  .video-tab .vt-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--vt-arrow-size);
+    height: var(--vt-arrow-size);
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    z-index: 5;
+  }
+  
+  .video-tab .vt-arrow svg { width: 20px; height: 20px; }
+  
+  .video-tab .vt-arrow--prev {
+    left: 8px;
+  }
+  
+  .video-tab .vt-arrow--next {
+    right: 8px;
+  }
+  
+  /* pagination indicator */
+  .video-tab .vt-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  
+  .video-tab .vt-dot {
+    width: 36px;
+    height: 6px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.12);
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  
+  .video-tab .vt-dot--active {
+    background: var(--accent, #e12b2b);
+    transform: scaleX(1.05);
+  }
+  
+  /* responsive: two cards per slide on >= 880px */
+  @media (min-width: 880px) {
+    .video-tab .vt-slide {
+      gap: var(--vt-gap);
+    }
+    .video-tab .vt-slide .vt-card {
+      min-width: calc((100% - var(--vt-gap)) / 2);
+      flex: 0 0 calc((100% - var(--vt-gap)) / 2);
+    }
+  }
+  
+  /* small screens: show one card only */
+  @media (max-width: 600px) {
+    .video-tab .vt-title { font-size: 1.4rem; }
+    .video-tab .vt-arrow { display: none; }
+    .video-tab .vt-dot { width: 28px; }
+  }
+  
