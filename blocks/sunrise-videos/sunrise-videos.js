@@ -1,49 +1,11 @@
-/* Sunrise Videos – Minimal 2-per-slide Inline Player */
-
-function extractYouTubeId(str) {
-    // If the author puts just the ID
-    if (/^[a-zA-Z0-9_-]{11}$/.test(str)) return str;
+export default async function decorate(block) {
+    // Wait for block content to actually be present
+    await new Promise((resolve) => requestAnimationFrame(resolve));
   
-    // If the author puts a full URL
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#?]*).*/;
-    const match = str.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  }
-  
-  function createThumbnail(id) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'sv-thumb';
-    wrapper.dataset.id = id;
-  
-    const img = document.createElement('img');
-    img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-    img.alt = 'Video thumbnail';
-    img.loading = 'lazy';
-  
-    const play = document.createElement('div');
-    play.className = 'sv-play-btn';
-  
-    wrapper.appendChild(img);
-    wrapper.appendChild(play);
-  
-    return wrapper;
-  }
-  
-  function createIframe(id) {
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-    iframe.allow =
-      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.allowFullscreen = true;
-    iframe.frameBorder = '0';
-    return iframe;
-  }
-  
-  export default function decorate(block) {
     const rows = block.querySelectorAll(':scope > div');
     const ids = [];
   
-    // --- Parse authored content (skip header row) ---
+    // Parse authored rows (skip header)
     for (let i = 1; i < rows.length; i++) {
       const cell = rows[i].querySelector(':scope > div');
       if (!cell) continue;
@@ -55,11 +17,11 @@ function extractYouTubeId(str) {
     }
   
     if (ids.length === 0) {
-      console.error('No valid YouTube IDs found.');
+      console.error('No YouTube IDs found in content.');
       return;
     }
   
-    // --- Build minimal slider ---
+    // Build slider layout
     block.innerHTML = `
       <div class="sv-slider-wrapper">
         <button class="sv-arrow sv-left">‹</button>
@@ -70,7 +32,7 @@ function extractYouTubeId(str) {
   
     const track = block.querySelector('.sv-track');
   
-    // Create slides (2 per slide)
+    // 2 per slide
     for (let i = 0; i < ids.length; i += 2) {
       const slide = document.createElement('div');
       slide.className = 'sv-slide';
@@ -99,12 +61,10 @@ function extractYouTubeId(str) {
       update();
     };
   
-    // Inline embed (replace thumbnail with iframe on click)
     track.addEventListener('click', (e) => {
-      const thumb = e.target.closest('.sv-thumb');
-      if (!thumb) return;
-      const id = thumb.dataset.id;
-      thumb.replaceWith(createIframe(id));
+      const t = e.target.closest('.sv-thumb');
+      if (!t) return;
+      t.replaceWith(createIframe(t.dataset.id));
     });
   }
   
