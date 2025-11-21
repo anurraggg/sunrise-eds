@@ -10,17 +10,17 @@
 /* INNER VISIBLE WINDOW */
 .sv-slider {
   width: 100%;
-  overflow: hidden; /* Clipping for slider */
+  overflow: hidden;
 }
 
-/* TRACK (HOLDS ALL SLIDES) */
+/* TRACK */
 .sv-track {
   display: flex;
   width: 100%;
   transition: transform 0.45s ease;
 }
 
-/* EACH SLIDE (2 per slide, centered) */
+/* EACH SLIDE (2 per slide) */
 .sv-slide {
   flex: 0 0 100%;
   display: flex;
@@ -68,32 +68,42 @@ iframe {
   backdrop-filter: blur(3px);
 }
 
-/* PREV / NEXT ARROWS */
+/* --- PERFECT CIRCLE ARROW BUTTONS (FIXED) --- */
 .sv-prev,
 .sv-next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #ff0000;
-  color: white;
+  background: #f0ede4;
+  color: #ed343d;
   border: none;
-  padding: 14px 18px;
+
+  /* FIX: remove padding and force perfect circle */
+  width: 60px;
+  height: 60px;
+  padding: 0;
+
   border-radius: 50%;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   z-index: 20;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-  transition: background 0.3s ease, transform 0.2s ease;
+
+  transition: background 0.25s ease, transform 0.2s ease;
 }
 
-/* Hover animation */
+/* HOVER — matches your desired screenshot */
 .sv-prev:hover,
 .sv-next:hover {
-  background: #e00000;
-  transform: translateY(-50%) scale(1.1);
+  background: #efe7d2;
+  transform: translateY(-50%) scale(1.07);
 }
 
-/* Arrow positions */
+/* EXACT ARROW POSITIONING */
 .sv-prev {
   left: -30px;
 }
@@ -102,11 +112,11 @@ iframe {
   right: -30px;
 }
 
-/* --- PROGRESS BAR (BOTTOM SLIDER) --- */
+/* --- PROGRESS BAR SLIDER --- */
 .sv-progress {
   width: 130px;
   height: 6px;
-  background: #d8d8d8;
+  background: #dedede;
   border-radius: 4px;
   margin: 18px auto 0 auto;
   cursor: pointer;
@@ -116,9 +126,9 @@ iframe {
 .sv-progress-indicator {
   width: 0%;
   height: 6px;
-  background: #e60000; /* Sunrise Red */
+  background: #e60000;
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.35s ease;
 }
 
 /* --- MOBILE RESPONSIVE --- */
