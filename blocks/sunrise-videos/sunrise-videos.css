@@ -10,7 +10,7 @@
 /* INNER VISIBLE WINDOW */
 .sv-slider {
   width: 100%;
-  overflow: hidden; /* Viewport clipping happens here */
+  overflow: hidden; /* Clipping for slider */
 }
 
 /* TRACK (HOLDS ALL SLIDES) */
@@ -26,11 +26,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 24px;        /* Slightly increased spacing between videos */
+  gap: 24px;
   padding: 10px 0;
 }
 
-/* THUMBNAILS + IFRAMES */
+/* THUMBNAIL + IFRAME */
 .sv-thumb,
 iframe {
   width: 48%;
@@ -38,19 +38,18 @@ iframe {
   border-radius: 10px;
   display: block;
   cursor: pointer;
-  position: relative;     /* REQUIRED for centering play button */
+  position: relative;
   overflow: hidden;
-  height: 400px;
 }
 
-/* THUMBNAIL IMAGE */
+/* THUMB IMAGE */
 .sv-thumb img {
   width: 100%;
   display: block;
   border-radius: 10px;
 }
 
-/* PLAY BUTTON (Centered on each video) */
+/* PLAY BUTTON */
 .sv-play {
   position: absolute;
   top: 50%;
@@ -66,10 +65,10 @@ iframe {
   font-size: 32px;
   color: black;
   pointer-events: none;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(3px);
 }
 
-/* PREV / NEXT BUTTONS */
+/* PREV / NEXT ARROWS */
 .sv-prev,
 .sv-next {
   position: absolute;
@@ -83,7 +82,6 @@ iframe {
   cursor: pointer;
   font-size: 24px;
   z-index: 20;
-
   box-shadow: 0 4px 10px rgba(0,0,0,0.25);
   transition: background 0.3s ease, transform 0.2s ease;
 }
@@ -95,16 +93,35 @@ iframe {
   transform: translateY(-50%) scale(1.1);
 }
 
-/* Move arrows slightly outward */
+/* Arrow positions */
 .sv-prev {
-  left: -30px; /* Adjust this if you want them further in/out */
+  left: -30px;
 }
 
 .sv-next {
   right: -30px;
 }
 
-/* MOBILE TWEAKS */
+/* --- PROGRESS BAR (BOTTOM SLIDER) --- */
+.sv-progress {
+  width: 130px;
+  height: 6px;
+  background: #d8d8d8;
+  border-radius: 4px;
+  margin: 18px auto 0 auto;
+  cursor: pointer;
+  position: relative;
+}
+
+.sv-progress-indicator {
+  width: 0%;
+  height: 6px;
+  background: #e60000; /* Sunrise Red */
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* --- MOBILE RESPONSIVE --- */
 @media (max-width: 768px) {
 
   .sv-slide {
@@ -119,10 +136,14 @@ iframe {
   }
 
   .sv-prev {
-    left: 5px;
+    left: 10px;
   }
 
   .sv-next {
-    right: 5px;
+    right: 10px;
+  }
+
+  .sv-progress {
+    margin-top: 12px;
   }
 }
