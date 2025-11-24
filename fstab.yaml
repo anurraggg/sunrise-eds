@@ -1,2 +1,6 @@
 mountpoints:
   /: https://drive.google.com/drive/u/0/folders/1daqn7bXh80g5TLVdML-LFuWUIPQ8CjrV
+
+code:
+  repo: https://github.com/anurraggg/sunrise-eds
+  ref: main
